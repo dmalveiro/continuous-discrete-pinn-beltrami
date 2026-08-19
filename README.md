@@ -6,7 +6,7 @@ This repository contains the code and the data files containing the computationa
 
 The work compares the continuous-time or vanilla PINNs (V-PINNs) and discrete-time PINNs (DT-PINNs), each of which with and without Adaptive Loss Weights (ALW) — fixed weights and variable weights, respectively — varying the initial learning rate and activation function, for solving the three-dimensional (3D) transient Navier-Stokes equations, using the Beltrami flow analytical solutions as references.
 
-The experiments investigate model accuracy and convergence, 
+The experiments investigate model accuracy and convergence and performance across the case studies considered.
 
 ## Directory Structure
 
