@@ -1,3 +1,20 @@
+# This file is based on DeepXDE:
+# https://github.com/lululxvi/deepxde
+#
+# Original DeepXDE source is licensed under the GNU Lesser General Public
+# License, version 2.1 (LGPL-2.1).
+#
+# This file is a modified version of the source file "model.py".
+#
+# Modifications:
+# - Added support for Adaptive Loss Weights based on past gradient statistics.
+# - Added support for Early Stopping.
+#
+# Modified by Duarte Malveiro
+# Most recent date of modification: 2026-08-19.
+#
+# This modified file remains licensed under LGPL-2.1.
+
 __all__ = ["LossHistory", "Model", "TrainState"]
 
 import pickle
