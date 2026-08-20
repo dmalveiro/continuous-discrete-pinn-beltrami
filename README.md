@@ -110,3 +110,21 @@ Table IV:
 Table V:
 - `continuous-discrete-pinn-beltrami/memory_usage/vram_*_dtpinn_*.csv`
 - `continuous-discrete-pinn-beltrami/tables_report.xlsx` (tab "performance")
+
+## Hardware and Software setup
+
+The code was developed and the experiments were performed using the configuration below:
+
+- **Architecture:** x86-64 (virtualized)
+- **CPU model:** Intel Xeon Silver 4214R
+- **Memory:** 256 GB RAM
+- **GPU:** Nvidia Tesla V100S PCIe 32 GB
+- **Nvidia driver version:** 555.42.02
+- **CUDA version:** 12.6
+- **Operating System:** Ubuntu 20.04.6 LTS
+- **ML Backend:** PyTorch 2.9.1+cu126
+- **PINNs Framework:** DeepXDE 1.15.0
+
+The computations for the present work are performed in single precision, using a single GPU for training and inferencing.
+
+
