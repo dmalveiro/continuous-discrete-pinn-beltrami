@@ -127,7 +127,7 @@ The code was developed and the experiments were performed using the configuratio
 
 The computations for the present work are performed in single precision, using a single GPU for training and inferencing.
 
-## DeepXDE and the code
+## The codes
 
 This project uses the [DeepXDE](https://github.com/lululxvi/deepxde) framework. The model.py file from DeepXDE source code is modified (see `model_MOD.py`) to implement the adaptive loss weighting algorithm.
 
