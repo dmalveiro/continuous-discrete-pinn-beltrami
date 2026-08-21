@@ -8,6 +8,16 @@ The work compares the continuous-time or vanilla PINNs (V-PINNs) with discrete-t
 
 The experiments investigate model accuracy, convergence and performance across the case studies considered.
 
+## The codes
+
+This project uses the [DeepXDE](https://github.com/lululxvi/deepxde) framework. The model.py file from DeepXDE source code is modified (see `model_MOD.py`) to implement the ALW algorithm.
+
+The implementation is based on the [Beltrami Flow example](https://deepxde.readthedocs.io/en/latest/demos/pinn_forward/Beltrami_flow.html) provided in the DeepXDE documentation, with substantial modifications to accomodate the project requirements. These can be seen in every `beltrami_*_0` through `beltrami_*_3` folder. The code logic is presented in the scheme below.
+
+In summary: this project starts from an existing implementation from DeepXDE, which was then transformed to support methodologies that are were not supported by that implementation. The table below presents a side-by-side comparison between the DeepXDE original work and the implementation here presented.
+
+
+
 ## Directory Structure
 
     continuous-discrete-pinn-beltrami/
@@ -127,10 +137,3 @@ The code was developed and the experiments were performed using the configuratio
 
 The computations for the present work are performed in single precision, using a single GPU for training and inferencing.
 
-## The codes
-
-This project uses the [DeepXDE](https://github.com/lululxvi/deepxde) framework. The model.py file from DeepXDE source code is modified (see `model_MOD.py`) to implement the adaptive loss weighting algorithm.
-
-The implementation is based on the [Beltrami Flow example](https://deepxde.readthedocs.io/en/latest/demos/pinn_forward/Beltrami_flow.html) provided in the DeepXDE documentation, with substantial modifications to accomodate the project requirements. These can be seen in every `beltrami_*_0` through `beltrami_*_3` folder. The code logic is presented in the scheme below.
-
-Thus, this project starts from an existing implementation, which was then transformed to support methodologies that are were not supported by that implementation.
