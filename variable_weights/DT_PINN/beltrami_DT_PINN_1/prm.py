@@ -38,10 +38,6 @@ x_max = [1, 1, 1]
 t_min = 0
 t_max = 1
 
-# Fourier embeddings parameters
-inl_fourier = 128
-sigma = 0.5
-
 # Current time instant, time step and number of time steps
 time = 0
 ib = 0
