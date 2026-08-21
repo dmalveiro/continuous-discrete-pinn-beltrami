@@ -8,6 +8,16 @@ The work compares the continuous-time or vanilla PINNs (V-PINNs) with discrete-t
 
 The experiments investigate model accuracy, convergence and performance across the case studies considered.
 
+## The codes
+
+This project uses the [DeepXDE](https://github.com/lululxvi/deepxde) framework. The model.py file from DeepXDE source code is modified (see `model_MOD.py`) to implement the ALW algorithm.
+
+The implementation is based on the [Beltrami Flow example](https://deepxde.readthedocs.io/en/latest/demos/pinn_forward/Beltrami_flow.html) provided in the DeepXDE documentation, with substantial modifications to accomodate the project requirements. These can be seen in every `beltrami_*_0` through `beltrami_*_3` folder. The code logic is presented in the scheme below.
+
+In summary: this project starts from an existing implementation from DeepXDE, which was then transformed to support methodologies that are were not supported by that implementation. The table below presents a side-by-side comparison between the DeepXDE original work and the implementation here presented.
+
+
+
 ## Directory Structure
 
     continuous-discrete-pinn-beltrami/
@@ -45,7 +55,10 @@ The experiments investigate model accuracy, convergence and performance across t
     │       ├── beltrami_V_PINN_1/
     │       ├── beltrami_V_PINN_2/
     │       └── beltrami_V_PINN_3/
-    └── memory_usage/
+    ├── memory_usage/
+    ├── model_MOD.py
+    ├── model_ORIGINAL.py
+    ├── tables_report.xlsx
     ├── README.md
     └── LICENSE
 
@@ -64,36 +77,63 @@ For example, the data files stored at `continuous-discrete-pinn-beltrami/V_PINN/
 
 ## Correspondence between results from the report and the data files
 
-- Figure 2:
-    `*_weights/V_PINN/beltrami_V_PINN_*/RUN_1000_*/CSV_post_processing/min_max_total_losses.csv`
-    `*_weights/V_PINN/beltrami_V_PINN_*/RUN_1000_*/CSV_post_processing/avg_loss_components.csv`
+Figure 2:
+- `continuous-discrete-pinn-beltrami/*_weights/V_PINN/beltrami_V_PINN_*/RUN_1000_*/CSV_post_processing/min_max_total_losses.csv`
+- `continuous-discrete-pinn-beltrami/*_weights/V_PINN/beltrami_V_PINN_*/RUN_1000_*/CSV_post_processing/avg_loss_components.csv`
   
-- Figure 3:
-    `*_weights/V_PINN/beltrami_V_PINN_*/RUN_1000_*/CSV_post_processing/avg_res_l2errors_v2_time.csv`
+Figure 3:
+- `continuous-discrete-pinn-beltrami/*_weights/V_PINN/beltrami_V_PINN_*/RUN_1000_*/CSV_post_processing/avg_res_l2errors_v2_time.csv`
 
-- Figure 4:
-    `*_weights/DT_PINN/beltrami_DT_PINN_*/RUN_1000_*/CSV_post_processing/avg_loss_components_ts0.csv`
-      **Note:** for the red/blue line, any file `avg_loss_components_ts0.csv` from any case study with DT-PINNs and tanh/sigmoid is suitable, since the files are all equal.
+Figure 4:
+- `continuous-discrete-pinn-beltrami/*_weights/DT_PINN/beltrami_DT_PINN_*/RUN_1000_*/CSV_post_processing/avg_loss_components_ts0.csv`
 
-- Figure 5:
-    `*_weights/DT_PINN/beltrami_DT_PINN_*/RUN_1000_*/CSV_post_processing/avg_loss_components.csv`
+**Note:** for the red/blue line, any file `avg_loss_components_ts0.csv` from any case study with DT-PINNs and tanh/sigmoid is suitable, since the files are all equal.
 
-- Figure 6:
-    `*_weights/DT_PINN/beltrami_DT_PINN_1/RUN_1000_sigmoid_1e_5/CSV_post_processing/avg_loss_components.csv`
-    `*_weights/DT_PINN/beltrami_DT_PINN_2/RUN_1000_tanh_1e_5/CSV_post_processing/avg_loss_components.csv`
+Figure 5:
+- `continuous-discrete-pinn-beltrami/*_weights/DT_PINN/beltrami_DT_PINN_*/RUN_1000_*/CSV_post_processing/avg_loss_components.csv`
+
+Figure 6:
+- `continuous-discrete-pinn-beltrami/*_weights/DT_PINN/beltrami_DT_PINN_1/RUN_1000_sigmoid_1e_5/CSV_post_processing/avg_loss_components.csv`
+- `continuous-discrete-pinn-beltrami/*_weights/DT_PINN/beltrami_DT_PINN_2/RUN_1000_tanh_1e_5/CSV_post_processing/avg_loss_components.csv`
   
-- Figure 7:
-    `*_weights/DT_PINN/beltrami_DT_PINN_*/RUN_1000_*/CSV_post_processing/avg_res_l2errors_v2_time.csv`
+Figure 7:
+- `continuous-discrete-pinn-beltrami/*_weights/DT_PINN/beltrami_DT_PINN_*/RUN_1000_*/CSV_post_processing/avg_res_l2errors_v2_time.csv`
   
-- Figure 8:
-    `fixed_weights/V_PINN/beltrami_V_PINN_3/RUN_1000_sigmoid_1e_3/CSV_post_processing/avg_res_l2errors_v2_time.csv`
-    `variable_weights/DT_PINN/beltrami_DT_PINN_0/RUN_1000_sigmoid_1e_4/CSV_post_processing/avg_res_l2errors_v2_time.csv`
-    `variable_weights/DT_PINN/beltrami_DT_PINN_2/RUN_1000_tanh_1e_5/CSV_post_processing/avg_res_l2errors_v2_time.csv`
-    `variable_weights/DT_PINN/beltrami_DT_PINN_1/RUN_1000_sigmoid_1e_5/CSV_post_processing/avg_res_l2errors_v2_time.csv`
+Figure 8:
+- `continuous-discrete-pinn-beltrami/fixed_weights/V_PINN/beltrami_V_PINN_3/RUN_1000_sigmoid_1e_3/CSV_post_processing/avg_res_l2errors_v2_time.csv`
+- `continuous-discrete-pinn-beltrami/variable_weights/DT_PINN/beltrami_DT_PINN_0/RUN_1000_sigmoid_1e_4/CSV_post_processing/avg_res_l2errors_v2_time.csv`
+- `continuous-discrete-pinn-beltrami/variable_weights/DT_PINN/beltrami_DT_PINN_2/RUN_1000_tanh_1e_5/CSV_post_processing/avg_res_l2errors_v2_time.csv`
+- `continuous-discrete-pinn-beltrami/variable_weights/DT_PINN/beltrami_DT_PINN_1/RUN_1000_sigmoid_1e_5/CSV_post_processing/avg_res_l2errors_v2_time.csv`
 
-- Table II:
-    Average values from `*_weights/V_PINN/beltrami_V_PINN_*/RUN_1000_*/CSV_post_processing/avg_res_l2errors_v2_time.csv`
+Table II:
+- `continuous-discrete-pinn-beltrami/*_weights/V_PINN/beltrami_V_PINN_*/RUN_1000_*/CSV_post_processing/avg_res_l2errors_v2_time.csv`
+- `continuous-discrete-pinn-beltrami/tables_report.xlsx` (tab "V_PINN")
 
-- Table III:
-    Average values from `*_weights/DT_PINN/beltrami_DT_PINN_*/RUN_1000_*/CSV_post_processing/avg_res_l2errors_v2_time.csv`
-  
+Table III:
+- `continuous-discrete-pinn-beltrami/*_weights/DT_PINN/beltrami_DT_PINN_*/RUN_1000_*/CSV_post_processing/avg_res_l2errors_v2_time.csv`
+- `continuous-discrete-pinn-beltrami/tables_report.xlsx` (tab "DT_PINN")
+
+Table IV:
+- `continuous-discrete-pinn-beltrami/memory_usage/vram_*_vpinn_*.csv`
+- `continuous-discrete-pinn-beltrami/tables_report.xlsx` (tab "performance")
+
+Table V:
+- `continuous-discrete-pinn-beltrami/memory_usage/vram_*_dtpinn_*.csv`
+- `continuous-discrete-pinn-beltrami/tables_report.xlsx` (tab "performance")
+
+## Hardware and Software setup
+
+The code was developed and the experiments were performed using the configuration below:
+
+- **Architecture:** x86-64 (virtualized)
+- **CPU model:** Intel Xeon Silver 4214R
+- **Memory:** 256 GB RAM
+- **GPU:** Nvidia Tesla V100S PCIe 32 GB
+- **Nvidia driver version:** 555.42.02
+- **CUDA version:** 12.6
+- **Operating System:** Ubuntu 20.04.6 LTS
+- **ML Backend:** PyTorch 2.9.1+cu126
+- **PINNs Framework:** DeepXDE 1.15.0
+
+The computations for the present work are performed in single precision, using a single GPU for training and inferencing.
+
