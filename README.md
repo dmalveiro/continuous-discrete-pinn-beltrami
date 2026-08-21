@@ -8,13 +8,21 @@ The work compares the continuous-time or vanilla PINNs (V-PINNs) with discrete-t
 
 The experiments investigate model accuracy, convergence and performance across the case studies considered.
 
-## The codes
+## Codes and instruction flow
 
-This project uses the [DeepXDE](https://github.com/lululxvi/deepxde) framework. The model.py file from DeepXDE source code is modified (see `model_MOD.py`) to implement the ALW algorithm.
+This project uses the [DeepXDE](https://github.com/lululxvi/deepxde) framework. The `model.py` file from DeepXDE source code is modified (see `model_MOD.py`) to implement the ALW algorithm.
 
 The implementation is based on the [Beltrami Flow example](https://deepxde.readthedocs.io/en/latest/demos/pinn_forward/Beltrami_flow.html) provided in the DeepXDE documentation, with substantial modifications to accomodate the project requirements. These can be seen in every `beltrami_*_0` through `beltrami_*_3` folder. The code logic is presented in the scheme below.
 
 In summary: this project starts from an existing implementation from DeepXDE, which was then transformed to support methodologies that are were not supported by that implementation. The table below presents a side-by-side comparison between the DeepXDE original work and the implementation here presented.
+
+| Aspect | DeepXDE reference | My implementation |
+|---|---|---|
+| Beltrami flow | Continuous-time example | Continuous and discrete-time formulations |
+| Loss weighting | Fixed | Fixed and Adaptive weighting |
+| Code organization | Single script | Modular structure |
+
+The codes present in every `beltrami_*_0` through `beltrami_*_3` folder are organized as below presented.
 
 
 
