@@ -10,9 +10,9 @@ The experiments investigate model accuracy, convergence and performance across t
 
 ## Codes and instruction flow
 
-This project uses the [DeepXDE](https://github.com/lululxvi/deepxde) framework. The `model.py` file from DeepXDE source code is modified (see `model_MOD.py`) to implement the ALW algorithm.
+This project uses the [DeepXDE](https://github.com/lululxvi/deepxde) framework [1]. The `model.py` file from DeepXDE source code is modified (see `model_MOD.py`) to implement the ALW algorithm.
 
-The implementation is based on the [Beltrami Flow example](https://deepxde.readthedocs.io/en/latest/demos/pinn_forward/Beltrami_flow.html) provided in the DeepXDE documentation, with substantial modifications to accomodate the project requirements. These can be seen in every `beltrami_*_0` through `beltrami_*_3` folder. The code logic is presented in the scheme below.
+The implementation is based on the [Beltrami Flow example](https://deepxde.readthedocs.io/en/latest/demos/pinn_forward/Beltrami_flow.html) provided in the DeepXDE documentation, with substantial modifications to accomodate the project requirements. These can be seen in every `beltrami_*_0` through `beltrami_*_3` folder.
 
 In summary: this project starts from an existing implementation from DeepXDE, which was then transformed to support methodologies that are were not supported by that implementation. The table below presents a side-by-side comparison between the DeepXDE original work and the implementation here presented.
 
@@ -22,7 +22,7 @@ In summary: this project starts from an existing implementation from DeepXDE, wh
 | Loss weighting | Fixed | Fixed and Adaptive weighting |
 | Code organization | Single script | Modular structure |
 
-The codes present in every `beltrami_*_0` through `beltrami_*_3` folder are organized as below presented.
+The codes present in every `beltrami_*_0` through `beltrami_*_3` folder, and the code logic, are as below presented.
 
 
 
@@ -144,4 +144,12 @@ The code was developed and the experiments were performed using the configuratio
 - **PINNs Framework:** DeepXDE 1.15.0
 
 The computations for the present work are performed in single precision, using a single GPU for training and inferencing.
+
+
+
+
+
+## References
+
+[1] L. Lu, X. Meng, Z. Mao, and G. E. Karniadakis, "DeepXDE: A Deep Learning Library for Solving Differential Equations”, *SIAM Review*, vol. 63, no. 1, p. 208–228, Jan. 2021. [Online]. Available: http://dx.doi.org/10.1137/19M1274067
 
