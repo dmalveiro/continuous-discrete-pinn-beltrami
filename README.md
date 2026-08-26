@@ -22,8 +22,81 @@ In summary: this project starts from an existing implementation from DeepXDE, wh
 | Loss weighting | Fixed | Fixed and Adaptive weighting |
 | Code organization | Single script | Modular structure |
 
-The codes present in every `beltrami_*_0` through `beltrami_*_3` folder, and the code logic, are as below presented.
+Below it is presented an execution overview for the V-PINN implementation, summarizing the codes present in every `beltrami_*_0` through `beltrami_*_3` folder.
 
+                            main.py
+                               ↓
+    ════════════════ 1) REPEAT FOR nrun RUNS ════════════════
+                               ↓
+            Training set, model and network preparation
+                               ↓
+                 Model configuration and training
+                               ↓
+          ══════ 2) REPEAT FOR n_dt TIME STEPS ══════
+                               ↓
+                        t > 0 → transfer previous model
+                               ↓
+                        train → evaluate → save
+
+<details>
+<summary><strong>Function and module overview</strong></summary>
+
+<div class="tg-wrap">
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-7btt">Function</th>
+    <th class="tg-7btt">File</th>
+    <th class="tg-7btt">Purpose (V-PINN)</th>
+    <th class="tg-7btt">Purpose (DT-PINN)</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-7btt">—</td>
+    <td class="tg-c3ow"><code>main.py</code></td>
+    <td class="tg-9wq8" colspan="2">Entry point; calls <code>run_iterations()</code></td>
+  </tr>
+  <tr>
+    <td class="tg-jq7i"><code>run_iterations()</code></td>
+    <td class="tg-c3ow"><code>iterationsss.py</code></td>
+    <td class="tg-9wq8" colspan="2">Core of the code, where all operations below are placed, according to their order of execution</td>
+  </tr>
+  <tr>
+    <td class="tg-c3ow"><code>create_mesh()</code></td>
+    <td class="tg-c3ow"><code>results.py</code></td>
+    <td class="tg-7btt">—</td>
+    <td class="tg-c3ow">Entry point; calls <code>run_iterations()</code></td>
+  </tr>
+  <tr>
+    <td class="tg-c3ow"><code>create_model_a()</code></td>
+    <td class="tg-c3ow"><code>model_nn.py</code></td>
+    <td class="tg-7btt">—</td>
+    <td class="tg-c3ow">Creates the PINN for \(t=0\)</td>
+  </tr>
+  <tr>
+    <td class="tg-c3ow"><code>create_training_set()</code></td>
+    <td class="tg-c3ow"><code>bc_ic.py</code></td>
+    <td class="tg-7btt">—</td>
+    <td class="tg-c3ow">Loads the training points</td>
+  </tr>
+  <tr>
+    <td class="tg-c3ow"><code>dde.data.PDE()</code></td>
+    <td class="tg-c3ow"><code>bc_ic.py</code></td>
+    <td class="tg-7btt">—</td>
+    <td class="tg-c3ow">Time-independent PDE solver</td>
+  </tr>
+  <tr>
+    <td class="tg-c3ow"><code>dde.geometry.Cuboid()</code></td>
+    <td class="tg-c3ow"><code>bc_ic.py</code></td>
+    <td class="tg-7btt">—</td>
+    <td class="tg-c3ow">Defines the 3D space domain and geometry</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+</details>
 
 
 ## Directory Structure
@@ -145,138 +218,7 @@ The code was developed and the experiments were performed using the configuratio
 
 The computations for the present work are performed in single precision, using a single GPU for training and inferencing.
 
-    main.py
-    └── run_iterations()
-        ├── create_mesh()
-        ├── create_model_a()
-        │   ├── create_training_set()
-        │   ├── dde.data.PDE()
-        │   │   ├── dde.geometry.Cuboid()
-        │   │   └── pde_initial()
-        │   │       ├── u0_func()
-        │   │       │   └── pytorch_output()
-        │   │       ├── v0_func()
-        │   │       │   └── pytorch_output()
-        │   │       ├── w0_func()
-        │   │       │   └── pytorch_output()
-        │   │       └── p0_func()
-        │   │           └── pytorch_output()
-        │   ├── dde.nn.FNN()
-        │   └── dde.Model()
-        ├── dde.Model.compile()
-        ├── dde.Model.train()
-        ├── dde.saveplot()
-        ├── pred_exact()
-        │   ├── pytorch_output()
-        │   ├── u_func()
-        │   │   └── pytorch_output()
-        │   ├── v_func()
-        │   │   └── pytorch_output()
-        │   ├── w_func()
-        │   │   └── pytorch_output()
-        │   ├── p_func()
-        │   │   └── pytorch_output()
-        │   └── dde.metrics.l2_relative_error()
-        ├── save_training_times()
-        ├── in_variables()
-        ├── create_model_b()
-        │   ├── create_training_set()
-        │   ├── dde.data.PDE()
-        │   │   ├── dde.geometry.Cuboid()
-        │   │   ├── pde()
-        │   │   │   ├── dde.grad.jacobian()
-        │   │   │   └── dde.grad.hessian()
-        │   │   ├── dde.icbc.DirichletBC()
-        │   │   │   └── u_func()
-        │   │   │       └── pytorch_output()
-        │   │   ├── dde.icbc.DirichletBC()
-        │   │   │   └── v_func()
-        │   │   │       └── pytorch_output()
-        │   │   ├── dde.icbc.DirichletBC()
-        │   │   │   └── w_func()
-        │   │   │       └── pytorch_output()
-        │   │   ├── dde.icbc.DirichletBC()
-        │   │   │   └── p_func()
-        │   │   │       └── pytorch_output()        
-        │   │   └── aux_b()
-        │   │       └── compute_gradients()
-        │   │           ├── pytorch_output()
-        │   │           └── derivative()
-        │   ├── dde.nn.FNN()
-        │   └── dde.Model()
-        ├── dde.Model.compile()
-        ├── dde.Model.train()
-        ├── dde.saveplot()
-        ├── pred_exact()
-        │   ├── pytorch_output()
-        │   ├── u_func()
-        │   │   └── pytorch_output()
-        │   ├── v_func()
-        │   │   └── pytorch_output()
-        │   ├── w_func()
-        │   │   └── pytorch_output()
-        │   ├── p_func()
-        │   │   └── pytorch_output()
-        │   ├── compute_gradients()
-        │   │   └── derivative()
-        │   ├── pde()
-        │   │   ├── dde.grad.jacobian()
-        │   │   └── dde.grad.hessian()
-        │   └── dde.metrics.l2_relative_error()
-        ├── save_training_times()
-        └── in_variables()
 
-    main.py
-    └── run_iterations()
-        ├── create_model()
-        │   ├── create_training_set()
-        │   ├── dde.data.TimePDE()
-        │   │   ├── dde.geometry.Cuboid()
-        │   │   ├── dde.geometry.TimeDomain()
-        │   │   ├── dde.geometry.GeometryXTime()
-        │   │   ├── pde()
-        │   │   │   ├── dde.grad.jacobian()
-        │   │   │   └── dde.grad.hessian()
-        │   │   ├── dde.icbc.DirichletBC()
-        │   │   │   └── u_func()
-        │   │   │       └── pytorch_output()
-        │   │   ├── dde.icbc.DirichletBC()
-        │   │   │   └── v_func()
-        │   │   │       └── pytorch_output()
-        │   │   ├── dde.icbc.DirichletBC()
-        │   │   │   └── w_func()
-        │   │   │       └── pytorch_output()        
-        │   │   ├── dde.icbc.IC()
-        │   │   │   └── u_func()
-        │   │   │       └── pytorch_output()
-        │   │   ├── dde.icbc.IC()
-        │   │   │   └── v_func()
-        │   │   │       └── pytorch_output()
-        │   │   └── dde.icbc.IC()
-        │   │       └── w_func()
-        │   │           └── pytorch_output() 
-        │   ├── dde.nn.FNN()
-        │   └── dde.Model()
-        ├── dde.Model.compile()
-        ├── dde.callbacks.Timer()
-        ├── dde.Model.train()
-        ├── dde.saveplot()
-        ├── save_training_times()
-        ├── pred_exact()
-        │   ├── pytorch_output()
-        │   ├── u_func()
-        │   │   └── pytorch_output()
-        │   ├── v_func()
-        │   │   └── pytorch_output()
-        │   ├── w_func()
-        │   │   └── pytorch_output()
-        │   ├── p_func()
-        │   │   └── pytorch_output()
-        │   ├── pde()
-        │   │   ├── dde.grad.jacobian()
-        │   │   └── dde.grad.hessian()
-        │   └── dde.metrics.l2_relative_error()
-        └── in_variables()
 
 
 ## References
