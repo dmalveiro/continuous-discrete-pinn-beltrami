@@ -45,53 +45,342 @@ Below it is presented an execution overview for the V-PINN implementation, summa
 <table class="tg">
 <thead>
   <tr>
-    <th class="tg-7btt">Function</th>
+    <th class="tg-7btt">Function / operation</th>
     <th class="tg-7btt">File</th>
     <th class="tg-7btt">Purpose (V-PINN)</th>
     <th class="tg-7btt">Purpose (DT-PINN)</th>
   </tr>
 </thead>
 <tbody>
+
+  <tr>
+    <td class="tg-amwm">—</td>
+    <td class="tg-baqh"><code>Makefile</code></td>
+    <td class="tg-baqh" colspan="2">
+      The <code>make clean</code> command removes <code>__pycache__</code> directories and <code>*.log</code> files.
+    </td>
+  </tr>
+
   <tr>
     <td class="tg-7btt">—</td>
     <td class="tg-c3ow"><code>main.py</code></td>
-    <td class="tg-9wq8" colspan="2">Entry point; calls <code>run_iterations()</code></td>
+    <td class="tg-9wq8" colspan="2">
+      Entry point; calls <code>run_iterations()</code>.
+    </td>
   </tr>
+
+  <tr>
+    <td class="tg-7btt">—</td>
+    <td class="tg-c3ow"><code>prm.py</code></td>
+    <td class="tg-7btt">—</td>
+    <td class="tg-c3ow">
+      Defines the variables, parameters, and settings used by the DT-PINN codes.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-7btt">—</td>
+    <td class="tg-c3ow"><code>param.py</code></td>
+    <td class="tg-c3ow">
+      Defines the variables, parameters, and settings used by the V-PINN codes.
+    </td>
+    <td class="tg-7btt">—</td>
+  </tr>
+
   <tr>
     <td class="tg-jq7i"><code>run_iterations()</code></td>
     <td class="tg-c3ow"><code>iterationsss.py</code></td>
-    <td class="tg-9wq8" colspan="2">Core of the code, where all operations below are placed, according to their order of execution</td>
+    <td class="tg-9wq8" colspan="2">
+      Controls the main execution flow, including model creation, training, inference, and data storage.
+    </td>
   </tr>
+
   <tr>
     <td class="tg-c3ow"><code>create_mesh()</code></td>
     <td class="tg-c3ow"><code>results.py</code></td>
     <td class="tg-7btt">—</td>
-    <td class="tg-c3ow">Entry point; calls <code>run_iterations()</code></td>
+    <td class="tg-c3ow">
+      Creates the structured mesh used as the test set.
+    </td>
   </tr>
+
   <tr>
     <td class="tg-c3ow"><code>create_model_a()</code></td>
     <td class="tg-c3ow"><code>model_nn.py</code></td>
     <td class="tg-7btt">—</td>
-    <td class="tg-c3ow">Creates the PINN for \(t=0\)</td>
+    <td class="tg-c3ow">
+      Creates the PINN problem and neural network for the initial time, <i>t</i> = 0.
+    </td>
   </tr>
+
+  <tr>
+    <td class="tg-baqh"><code>create_model()</code></td>
+    <td class="tg-baqh"><code>model_nn.py</code></td>
+    <td class="tg-baqh">
+      Creates the PINN for the fully continuous transient problem.
+    </td>
+    <td class="tg-amwm">—</td>
+  </tr>
+
   <tr>
     <td class="tg-c3ow"><code>create_training_set()</code></td>
     <td class="tg-c3ow"><code>bc_ic.py</code></td>
-    <td class="tg-7btt">—</td>
-    <td class="tg-c3ow">Loads the training points</td>
+    <td class="tg-c3ow" colspan="2">
+      Loads the training points.
+    </td>
   </tr>
+
   <tr>
-    <td class="tg-c3ow"><code>dde.data.PDE()</code></td>
-    <td class="tg-c3ow"><code>bc_ic.py</code></td>
+    <td class="tg-c3ow"><code>dde.data.PDE()</code>, <i>t</i> = 0</td>
+    <td class="tg-c3ow"><code>model_nn.py</code></td>
     <td class="tg-7btt">—</td>
-    <td class="tg-c3ow">Time-independent PDE solver</td>
+    <td class="tg-c3ow">
+      Defines the initial-time problem by fitting the analytical solution at <i>t</i> = 0.
+    </td>
   </tr>
+
+  <tr>
+    <td class="tg-baqh"><code>dde.data.TimePDE()</code></td>
+    <td class="tg-baqh"><code>model_nn.py</code></td>
+    <td class="tg-baqh">
+      Defines the fully continuous transient 3D Navier–Stokes problem subject to the specified constraints.
+    </td>
+    <td class="tg-amwm">—</td>
+  </tr>
+
   <tr>
     <td class="tg-c3ow"><code>dde.geometry.Cuboid()</code></td>
     <td class="tg-c3ow"><code>bc_ic.py</code></td>
     <td class="tg-7btt">—</td>
-    <td class="tg-c3ow">Defines the 3D space domain and geometry</td>
+    <td class="tg-c3ow">
+      Defines the 3D spatial domain and geometry.
+    </td>
   </tr>
+
+  <tr>
+    <td class="tg-baqh"><code>dde.geometry.TimeDomain()</code></td>
+    <td class="tg-baqh"><code>bc_ic.py</code></td>
+    <td class="tg-baqh">
+      Defines the time domain.
+    </td>
+    <td class="tg-amwm">—</td>
+  </tr>
+
+  <tr>
+    <td class="tg-baqh"><code>dde.geometry.GeometryXTime()</code></td>
+    <td class="tg-baqh"><code>bc_ic.py</code></td>
+    <td class="tg-baqh">
+      Combines the spatial and temporal domains into a single space-time domain.
+    </td>
+    <td class="tg-amwm">—</td>
+  </tr>
+
+  <tr>
+    <td class="tg-baqh"><code>dde.icbc.IC()</code></td>
+    <td class="tg-baqh"><code>bc_ic.py</code></td>
+    <td class="tg-baqh">
+      Enforces the analytical solution as the initial condition at <i>t</i> = 0.
+    </td>
+    <td class="tg-amwm">—</td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>pde_initial()</code></td>
+    <td class="tg-c3ow"><code>model_nn.py</code></td>
+    <td class="tg-7btt">—</td>
+    <td class="tg-c3ow">
+      Computes the residuals between the neural network predictions and the analytical solution at <i>t</i> = 0.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow">
+      <code>u0_func()</code>, <code>v0_func()</code>, <code>w0_func()</code>, <code>p0_func()</code>
+    </td>
+    <td class="tg-c3ow"><code>analytical_solution.py</code></td>
+    <td class="tg-7btt">—</td>
+    <td class="tg-c3ow">
+      Computes the analytical solutions for the velocity components <i>u</i>, <i>v</i>, <i>w</i> and pressure <i>p</i> at <i>t</i> = 0.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>pytorch_output()</code></td>
+    <td class="tg-c3ow"><code>numpy_to_torch.py</code></td>
+    <td class="tg-c3ow" colspan="2">
+      Converts input data into PyTorch tensors.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>dde.nn.FNN()</code></td>
+    <td class="tg-c3ow"><code>model_nn.py</code></td>
+    <td class="tg-c3ow" colspan="2">
+      Defines the fully connected neural network architecture.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>dde.Model()</code></td>
+    <td class="tg-c3ow"><code>model_nn.py</code></td>
+    <td class="tg-c3ow" colspan="2">
+      Creates the DeepXDE model from the problem definition and neural network.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>dde.Model.compile()</code></td>
+    <td class="tg-c3ow"><code>iterationsss.py</code></td>
+    <td class="tg-c3ow" colspan="2">
+      Configures the model for training.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-baqh"><code>dde.callbacks.Timer()</code></td>
+    <td class="tg-baqh"><code>iterationsss.py</code></td>
+    <td class="tg-baqh">
+      Sets the maximum training time, in minutes.
+    </td>
+    <td class="tg-amwm">—</td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>dde.Model.train()</code></td>
+    <td class="tg-c3ow"><code>iterationsss.py</code></td>
+    <td class="tg-c3ow" colspan="2">
+      Trains the neural network by minimizing the defined loss function.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>dde.saveplot()</code></td>
+    <td class="tg-c3ow"><code>iterationsss.py</code></td>
+    <td class="tg-c3ow" colspan="2">
+      Saves the training loss history.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>pred_exact()</code></td>
+    <td class="tg-c3ow"><code>results.py</code></td>
+    <td class="tg-c3ow">
+      Performs model inference at the test set and computes the PDE residuals and L2 relative errors.
+    </td>
+    <td class="tg-c3ow">
+      Infers the current model at the test set and computes the PDE residuals and L2 relative errors.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow">
+      <code>u_func()</code>, <code>v_func()</code>, <code>w_func()</code>, <code>p_func()</code>
+    </td>
+    <td class="tg-c3ow"><code>analytical_solution.py</code></td>
+    <td class="tg-c3ow" colspan="2">
+      Computes the analytical solutions for the velocity components <i>u</i>, <i>v</i>, <i>w</i> and pressure <i>p</i>.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>dde.metrics.l2_relative_error(a, b)</code></td>
+    <td class="tg-c3ow"><code>results.py</code></td>
+    <td class="tg-c3ow" colspan="2">
+      Computes the L2 relative error between variables <i>a</i> and <i>b</i>.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>save_training_times()</code></td>
+    <td class="tg-c3ow"><code>store_data.py</code></td>
+    <td class="tg-c3ow">
+      Records and saves the training time for each run.
+    </td>
+    <td class="tg-c3ow">
+      Records and saves the training time for each time step and run.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>in_variables()</code></td>
+    <td class="tg-c3ow"><code>store_data.py</code></td>
+    <td class="tg-c3ow" colspan="2">
+      Organizes and saves the metrics and prediction data produced by <code>pred_exact()</code>.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>create_model_b()</code></td>
+    <td class="tg-c3ow"><code>model_nn.py</code></td>
+    <td class="tg-7btt">—</td>
+    <td class="tg-c3ow">
+      Creates the PINN for the current time step (<i>t</i> &gt; 0).
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>dde.data.PDE()</code>, <i>t</i> &gt; 0</td>
+    <td class="tg-c3ow"><code>model_nn.py</code></td>
+    <td class="tg-7btt">—</td>
+    <td class="tg-c3ow">
+      Defines the 3D Navier–Stokes problem with second-order time discretization, subject to the specified constraints.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>pde()</code></td>
+    <td class="tg-c3ow"><code>ns_equations.py</code></td>
+    <td class="tg-c3ow">
+      Computes the residuals of the fully continuous transient 3D Navier–Stokes equations, including spatial and time derivatives of the model predictions.
+    </td>
+    <td class="tg-c3ow">
+      Computes the residuals of the discretized 3D Navier–Stokes equations with second-order midpoint time discretization and spatial derivatives of the current time step predictions.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>dde.grad.jacobian()</code>, <code>dde.grad.hessian()</code></td>
+    <td class="tg-c3ow"><code>ns_equations.py</code></td>
+    <td class="tg-c3ow" colspan="2">
+      Computes first- and second-order spatial derivatives, respectively, using DeepXDE automatic differentiation.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>dde.icbc.DirichletBC()</code></td>
+    <td class="tg-c3ow"><code>bc_ic.py</code></td>
+    <td class="tg-c3ow" colspan="2">
+      Enforces the analytical solutions as Dirichlet boundary conditions on the domain boundaries.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>aux_b()</code></td>
+    <td class="tg-c3ow"><code>model_nn.py</code></td>
+    <td class="tg-7btt">—</td>
+    <td class="tg-c3ow">
+      Supplies the previous time step predictions and respective spatial derivatives to <code>pde()</code>.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>compute_gradients()</code></td>
+    <td class="tg-c3ow"><code>previous_model_grad.py</code></td>
+    <td class="tg-7btt">—</td>
+    <td class="tg-c3ow">
+      Infers the previous model and computes the spatial derivatives of these predictions at the training or test points; organizes these quantities into the format required by <code>pde()</code>.
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tg-baqh"><code>derivative()</code></td>
+    <td class="tg-baqh"><code>previous_model_grad.py</code></td>
+    <td class="tg-amwm">—</td>
+    <td class="tg-baqh">
+      Computes first- and second-order spatial derivatives using PyTorch automatic differentiation.
+    </td>
+  </tr>
+
 </tbody>
 </table>
 </div>
