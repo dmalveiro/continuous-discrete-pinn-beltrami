@@ -22,21 +22,9 @@ In summary: this project starts from an existing implementation from DeepXDE, wh
 | Loss weighting | Fixed | Fixed and Adaptive weighting |
 | Code organization | Single script | Modular structure |
 
-Below it is presented an execution overview for the V-PINN implementation, summarizing the codes present in every `beltrami_*_0` through `beltrami_*_3` folder.
+In the image below one can see the execution flow charts presenting the core operations performed by the V-PINN (left) and DT-PINN (right) implementations, summarizing the codes present in every `beltrami_*_0` through `beltrami_*_3` folder.
 
-                            main.py
-                               ↓
-    ════════════════ 1) REPEAT FOR nrun RUNS ════════════════
-                               ↓
-            Training set, model and network preparation
-                               ↓
-                 Model configuration and training
-                               ↓
-          ══════ 2) REPEAT FOR n_dt TIME STEPS ══════
-                               ↓
-                        t > 0 → transfer previous model
-                               ↓
-                        train → evaluate → save
+![V-PINN and DT-PINN execution flow](figures/flow_chart.png)
 
 <details>
 <summary><strong>Function and module overview</strong></summary>
@@ -426,6 +414,10 @@ Below it is presented an execution overview for the V-PINN implementation, summa
     │       ├── beltrami_V_PINN_2/
     │       └── beltrami_V_PINN_3/
     ├── memory_usage/
+    ├── figures/
+    │   ├── flow_chart.png
+    │   ├── vpinn_scheme.png
+    │   └── dtpinn_scheme.png
     ├── model_MOD.py
     ├── model_ORIGINAL.py
     ├── tables_report.xlsx
@@ -442,6 +434,7 @@ The directory structure reflects the procedure used for training the models, nam
 - `RUN_*` is a naming convention stating the hyperparameter combination used for each case study, from left to right in the folder naming: number of training points, activation function, initial learning rate. This is where the training sets and the training times for the experiments are stored.
 - `CSV_post_processing/` contains the processed data directly used to generate the accuracy and convergence results presented in the report.
 - `memory_usage/` contains the memory usage registrations, in steps of 10 ms, during training.
+- `figures\` contains the figures present in this README.
 
 For example, the data files stored at `continuous-discrete-pinn-beltrami/V_PINN/beltrami_V_PINN_1/RUN_1000_sigmoid_1e_5` correspond to the case study where the model was trained with vanilla PINNs, using GPU number 1, with sigmoid activation function and initial learning rate equal to $10^{-5}$.
 
