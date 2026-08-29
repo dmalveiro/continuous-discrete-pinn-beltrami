@@ -1,6 +1,6 @@
 # Benchmarking Continuous and Discrete-Time PINNs on the Three-Dimensional Beltrami Flow
 
-This repository contains the code and the data files containing the computational results reported at the document in annex, titled **Benchmarking Continuous and Discrete-Time PINNs on the Three-Dimensional Beltrami Flow**. This document also presents a detailed explanation on the algorithms and methodology followed. It is advised to read it for a full understanding of the project here published.
+This repository contains the code and the data files containing the computational results reported at the document in annex, titled **Benchmarking Continuous and Discrete-Time PINNs on the Three-Dimensional Beltrami Flow**. This document also presents a detailed explanation on the fundamental concepts behind the work, methodology, implementation and metrics used. It is advised to read it for a full understanding of the project here published.
 
 ## Overview
 
@@ -25,6 +25,13 @@ In summary: this project starts from an existing implementation from DeepXDE, wh
 In the image below one can see the execution flow charts presenting the core operations performed by the V-PINN (left) and DT-PINN (right) implementations, summarizing the codes present in every `beltrami_*_0` through `beltrami_*_3` folder.
 
 ![V-PINN and DT-PINN execution flow](figures/flow_chart.png)
+
+In both V-PINN and DT-PINN implementations, the execution starts in `main.py`, with a function call to `iterationsss()`, which is where the instructions and other function calls needed to run the code are placed according to the instruction flow. The function `iterationsss()` runs in loop for a user-defined `nruns` number of runs.
+
+In V-PINN, the training set `training_set_run{r}_ORI.csv` present in the respective `RUN_1000_*` folder is extracted for the current run `r`. Then, the problem definition is set: 3D transient Navier-Stokes equations subject to constraints: a space-time domain, boundary and initial conditions (Beltrami flow analytical solutions in the domain boundaries and at t=0, respectively). The network architecture is then defined and the model is composed by the problem (data) plus the network. The PINN is then trained and the loss history is saved. Finally, for each time step (or instant) `i`: the velocity and pressure fields are predicted in the test set from the trained model and these results are evaluated by computing the residuals and L2 relative errors between the predicted and exact results in the test set. When all time steps are addressed (until `n_dt` time steps), average values of the evaluated metrics are stored in `final_data` file, and the execution ends. Optionally, the predicted, exact, relative errors and residuals at the test points can also be saved in csv files, which can be useful for visualizing results in software such as [Paraview](https://www.paraview.org/).
+
+Regarding the DT-PINN version, 
+
 
 <details>
 <summary><strong>Function and module overview</strong></summary>
