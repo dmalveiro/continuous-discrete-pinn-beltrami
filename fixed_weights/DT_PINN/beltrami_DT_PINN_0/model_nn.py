@@ -18,9 +18,9 @@ def pde_initial(x, y):
     return [res_u, res_v, res_w, res_p]
 
 
-def create_model_a(it):	# t = 0 -----------------------
+def create_model_a(r):	# t = 0 -----------------------
 
-    training_set = bc_ic.create_training_set(it)
+    training_set = bc_ic.create_training_set(r)
 
     data_a = dde.data.PDE(
         bc_ic.spatial_domain,
@@ -39,12 +39,12 @@ def create_model_a(it):	# t = 0 -----------------------
     return (data_a, model_a)
 
 
-def create_model_b(previous_model, it):	# t > 0 ----------------
+def create_model_b(previous_model, r):	# t > 0 ----------------
     def aux_b(x):
         uN_n_mat = previous_model_grad.compute_gradients(x, previous_model)
         return uN_n_mat
 
-    training_set = bc_ic.create_training_set(it)
+    training_set = bc_ic.create_training_set(r)
 
     data_b = dde.data.PDE(
         bc_ic.spatial_domain,

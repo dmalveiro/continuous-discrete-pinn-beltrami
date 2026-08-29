@@ -34,11 +34,11 @@ initial_condition_w = dde.icbc.IC(
     spatio_temporal_domain, w_func, lambda _, on_initial: on_initial, component=2
 )
 
-def create_training_set(it):
+def create_training_set(r):
 
     if param.deterministic == 1:
 
-        file_tr = f"training_set_it{it}_ORI.csv"
+        file_tr = f"training_set_run{r}_ORI.csv"
 
         if not os.path.exists(file_tr):
             print(f"Warning: '{file_tr}' not found in the current directory. Skipping.")

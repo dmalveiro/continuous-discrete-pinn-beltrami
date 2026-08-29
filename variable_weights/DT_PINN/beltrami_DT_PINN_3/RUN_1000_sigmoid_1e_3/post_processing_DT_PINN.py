@@ -11,37 +11,37 @@ if str(dir_one_up) not in sys.path:
     sys.path.append(str(dir_one_up))
 
 try:    # import from prm
-    from prm import niter, t_min, t_max, dt, n_dt, nepochs1_a, nepochs1_b
+    from prm import nrun, t_min, t_max, dt, n_dt, niters1_a, niters1_b
 except ImportError:
     prm = None
 
 ## i > 0 #####
-for i in range(niter):
+for i in range(nrun):
 
     loss_i_csv = []
 
     for j in range(1, n_dt):
 
-        loss_file = f"loss_it{i}_ts{j:04d}.dat"
+        loss_file = f"loss_run{i}_ts{j:04d}.dat"
         df = pd.read_csv(loss_file, sep=r"\s+", skiprows=1, header=None)
 
         cols = df.shape[1]
         cols_cut = (cols - 1) // 2
         cols_keep = cols - cols_cut
 
-        epochs_local = df.iloc[:,0].to_numpy()
-        loss_iti_tsj = df.iloc[:,1:cols_keep].to_numpy()
-        epochs_global = epochs_local + ((nepochs1_a + 1) + (j - 1) * (nepochs1_b + 1))
-        loss_iti_tsj_mod = np.hstack((epochs_global.reshape(-1, 1), loss_iti_tsj))
+        iterations_local = df.iloc[:,0].to_numpy()
+        loss_ri_tsj = df.iloc[:,1:cols_keep].to_numpy()
+        iterations_global = iterations_local + ((niters1_a + 1) + (j - 1) * (niters1_b + 1))
+        loss_ri_tsj_mod = np.hstack((iterations_global.reshape(-1, 1), loss_ri_tsj))
 
-        if j == 1: loss_i_csv = loss_iti_tsj_mod
-        else: loss_i_csv = np.vstack((loss_i_csv, loss_iti_tsj_mod))
+        if j == 1: loss_i_csv = loss_ri_tsj_mod
+        else: loss_i_csv = np.vstack((loss_i_csv, loss_ri_tsj_mod))
 
     np.savetxt(f'loss_{i}.csv', loss_i_csv, delimiter=',', fmt='%.8e')
 ########
 
 ## i = 0 #####
-loss_file_example_ts0 = "loss_it0_ts0000.dat"
+loss_file_example_ts0 = "loss_run0_ts0000.dat"
 df_example_ts0 = pd.read_csv(loss_file_example_ts0, sep=r"\s+", skiprows=1, header=None)
 rows_ts0, cols_ts0 = df_example_ts0.shape
 cols_cut_ts0 = (cols_ts0 - 1) // 2
@@ -58,10 +58,10 @@ sum_losses = np.zeros((rows_loss_i, cols_loss_i))
 total_loss_i = []
 min_max1 = np.zeros((rows_loss_i, 2))
 
-for i in range(niter):
+for i in range(nrun):
 
     ## i = 0 #####
-    loss_file_ts0 = f"loss_it{i}_ts0000.dat"
+    loss_file_ts0 = f"loss_run{i}_ts0000.dat"
     df_ts0 = pd.read_csv(loss_file_ts0, sep=r"\s+", skiprows=1, header=None)
     losses_i_ts0 = df_ts0.iloc[:,:cols_keep_ts0].to_numpy()
     sum_losses_ts0 += losses_i_ts0
@@ -88,28 +88,28 @@ for i in range(niter):
 
 
 # i = 0
-avg_losses_ts0 = sum_losses_ts0 / niter
+avg_losses_ts0 = sum_losses_ts0 / nrun
 
 # i > 0
-avg_losses = sum_losses / niter
+avg_losses = sum_losses / nrun
 
 ## i = 0 #####
-iterations_ts0 = avg_losses_ts0[:,0]
+runs_ts0 = avg_losses_ts0[:,0]
 total_loss_ts0 = np.sum(avg_losses_ts0[:,1:], axis=1)
-avg_loss_components_ts0 = np.column_stack((iterations_ts0, total_loss_ts0))
+avg_loss_components_ts0 = np.column_stack((runs_ts0, total_loss_ts0))
 #***
-total_losses_all_ts0 = np.hstack((iterations_ts0.reshape(-1, 1), total_losses_all_ts0))
-min_max1_total_losses_ts0 = np.hstack((iterations_ts0.reshape(-1, 1), min_max1_ts0))
+total_losses_all_ts0 = np.hstack((runs_ts0.reshape(-1, 1), total_losses_all_ts0))
+min_max1_total_losses_ts0 = np.hstack((runs_ts0.reshape(-1, 1), min_max1_ts0))
 
 ## i > 0 #####
-iterations = avg_losses[:,0]
+runs = avg_losses[:,0]
 total_loss = np.sum(avg_losses[:,1:], axis=1)
 res_loss = np.sum(avg_losses[:,1:5], axis=1)
 bc_loss = np.sum(avg_losses[:,5:], axis=1)
-avg_loss_components = np.column_stack((iterations, total_loss, res_loss, bc_loss))
+avg_loss_components = np.column_stack((runs, total_loss, res_loss, bc_loss))
 #***
-total_losses_all = np.hstack((iterations.reshape(-1, 1), total_losses_all))
-min_max1_total_losses = np.hstack((iterations.reshape(-1, 1), min_max1))
+total_losses_all = np.hstack((runs.reshape(-1, 1), total_losses_all))
+min_max1_total_losses = np.hstack((runs.reshape(-1, 1), min_max1))
 
 ## RESIDUALS / L2 ERRORS ########
 
@@ -138,7 +138,7 @@ for i in range(cols_final_data):
             min_max2[j,2*k] = np.min(final_data_v2_all[j,k::5])
             min_max2[j,2*k+1] = np.max(final_data_v2_all[j,k::5])
 
-res_l2errors_all_iterations = np.hstack((time, final_data_v2_all))
+res_l2errors_all_runs = np.hstack((time, final_data_v2_all))
 min_max2_res_l2errors = np.hstack((time, min_max2))
 
 ## i = 0 #####
@@ -162,5 +162,5 @@ np.savetxt('CSV_post_processing/min_max_total_losses.csv', min_max1_total_losses
 ## RESIDUALS / L2 ERRORS ########
 np.savetxt('CSV_post_processing/avg_res_l2errors.csv', avg_res_l2errors, delimiter=',', fmt='%.8e')
 np.savetxt('CSV_post_processing/avg_res_l2errors_v2_time.csv', avg_res_l2errors_v2_time, delimiter=',', fmt='%.8e')
-np.savetxt('CSV_post_processing/res_l2errors_all_iterations.csv', res_l2errors_all_iterations, delimiter=',', fmt='%.8e')
+np.savetxt('CSV_post_processing/res_l2errors_all_runs.csv', res_l2errors_all_runs, delimiter=',', fmt='%.8e')
 np.savetxt('CSV_post_processing/min_max_res_l2errors.csv', min_max2_res_l2errors, delimiter=',', fmt='%.8e')

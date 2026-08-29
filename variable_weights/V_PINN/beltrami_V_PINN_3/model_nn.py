@@ -4,9 +4,9 @@ import ns_equations as nseq
 import bc_ic
 import param
 
-def create_model(it):
+def create_model(r):
 
-    training_set = bc_ic.create_training_set(it)
+    training_set = bc_ic.create_training_set(r)
 
     data = dde.data.TimePDE(
         bc_ic.spatio_temporal_domain,

@@ -17,11 +17,11 @@ bc_v = dde.icbc.DirichletBC(spatial_domain, v_func, lambda _, on_boundary: on_bo
 bc_w = dde.icbc.DirichletBC(spatial_domain, w_func, lambda _, on_boundary: on_boundary, component=2)
 bc_p = dde.icbc.DirichletBC(spatial_domain, p_func, lambda _, on_boundary: on_boundary, component=3)
 
-def create_training_set(it):
+def create_training_set(r):
 
     if prm.deterministic == 1:
 
-        file_tr = f"training_set_it{prm.it}_ORI.csv"
+        file_tr = f"training_set_run{prm.r}_ORI.csv"
 
         if not os.path.exists(file_tr):
             print(f"Warning: '{file_tr}' not found in the current directory. Skipping.")

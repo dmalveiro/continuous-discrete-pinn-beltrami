@@ -4,7 +4,7 @@ import deepxde as dde
 # Training sets, validation sets, etc
 # BC = boundary condition; IC = initial condition
 # See more info: https://deepxde.readthedocs.io/en/latest/_modules/deepxde/data/pde.html#PDE
-def printall(data, it):
+def printall(data, r):
 
     print()
     print()
@@ -25,8 +25,8 @@ def printall(data, it):
     print(f"Input Data (train_x) dtype: {data.train_x.dtype}")
     print()
 
-    np.savetxt(f'train_x_all_it{it}.csv', data.train_x_all, delimiter=',')	# Domain points + BC points + IC points
-    np.savetxt(f'train_x_bc_it{it}.csv', data.train_x_bc, delimiter=',')	# BC points + IC points
-    np.savetxt(f'num_bcs_it{it}.csv', data.num_bcs, delimiter=',')		# Number of BC points + IC points
-    np.savetxt(f'train_x_it{it}.csv', data.train_x, delimiter=',')		# train_x = train_x_bc + train_x_all
-    np.savetxt(f'test_x_it{it}.csv', data.test_x, delimiter=',')		# test_x = train_x_bc + num_test
+    np.savetxt(f'train_x_all_run{r}.csv', data.train_x_all, delimiter=',')	# Domain points + BC points + IC points
+    np.savetxt(f'train_x_bc_run{r}.csv', data.train_x_bc, delimiter=',')	# BC points + IC points
+    np.savetxt(f'num_bcs_run{r}.csv', data.num_bcs, delimiter=',')		# Number of BC points + IC points
+    np.savetxt(f'train_x_run{r}.csv', data.train_x, delimiter=',')		# train_x = train_x_bc + train_x_all
+    np.savetxt(f'test_x_run{r}.csv', data.test_x, delimiter=',')		# test_x = train_x_bc + num_test

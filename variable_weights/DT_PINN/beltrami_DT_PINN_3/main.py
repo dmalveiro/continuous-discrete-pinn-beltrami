@@ -7,6 +7,5 @@ import deepxde as dde
 # Set default float to float64 (double precision)
 dde.config.set_default_float("float32")
 
-# Run the iterations / training
 import iterationsss
-niter = iterationsss.run_iterations()
+nrun = iterationsss.run_iterations()

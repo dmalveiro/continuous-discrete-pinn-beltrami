@@ -44,7 +44,7 @@ ib = 0
 time_step = 0
 dt = 0.01
 n_dt = int(1 + 1 / dt)
-it = 0		# iteration (run)
+r = 0		# run
 
 # Training points
 n_train1 = 800          		   # Number of training points at t>0
@@ -65,8 +65,8 @@ outl = 4			# number of elements at the output layer
 act_func = "tanh"		# activation function
 w_init = "Glorot normal"	# weight initializer method
 
-# Number of iterations to run the model
-niter = 10
+# Number of runs
+nrun = 10
 
 # Model compilation and training parameters
 # 1st stage
@@ -78,20 +78,20 @@ a2 = 1                                            	# weight attributed to the bo
 a12 = 1
 lossw1_a = [1, 1, 1, 1]
 lossw1_b = [a1, a1, a1, a12, a2, a2, a2, a2]
-nepochs1_a = 60000					# number of epochs per iteration
-nepochs1_b = 300
+niters1_a = 60000					# number of iterations per run
+niters1_b = 300
 # 2nd stage (optional)
 opt2 = "L-BFGS"
 lossw2_a = [1, 1, 1, 1]
 lossw2_b = [a1, a1, a1, a12, a2, a2, a2, a2]
-nepochs2_a = 200
-nepochs2_b = 200
+niters2_a = 200
+niters2_b = 200
 
-# Total number of epochs (only 1st stage)
-nepochs1 = nepochs1_a + (n_dt - 1) * nepochs1_b
+# Total number of iterations (only 1st stage)
+niters1 = niters1_a + (n_dt - 1) * niters1_b
 
-# Print losses in intervals of 'stepoch' epochs
-stepoch = 10
+# Print losses in intervals of 'step_iter' iterations
+step_iter = 10
 
 # Save additional files (0: no; 1: yes)
 save_additional = 0

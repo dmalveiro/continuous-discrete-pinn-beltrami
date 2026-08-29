@@ -6,7 +6,7 @@ from prm import time, ib
 # Training sets, validation sets, etc
 # BC = boundary condition; IC = initial condition
 # See more info: https://deepxde.readthedocs.io/en/latest/_modules/deepxde/data/pde.html#PDE
-def printall(data_ab, time_step, it):
+def printall(data_ab, time_step, r):
 
     print()
     print()
@@ -24,8 +24,8 @@ def printall(data_ab, time_step, it):
     print(f"Input Data (train_x) dtype: {data_ab.train_x.dtype}")
     print()
 
-    np.savetxt(f'train_x_all_it{it}_ts{time_step:04d}.csv', data_ab.train_x_all, delimiter=',')      # Domain points + BC points + IC points
-    np.savetxt(f'train_x_bc_it{it}_ts{time_step:04d}.csv', data_ab.train_x_bc, delimiter=',')        # BC points + IC points
-    np.savetxt(f'num_bcs_it{it}_ts{time_step:04d}.csv', data_ab.num_bcs, delimiter=',')              # Number of BC points + IC points
-    np.savetxt(f'train_x_it{it}_ts{time_step:04d}.csv', data_ab.train_x, delimiter=',')              # train_x = train_x_bc + train_x_all
-    np.savetxt(f'test_x_it{it}_ts{time_step:04d}.csv', data_ab.test_x, delimiter=',')                # test_x = train_x_bc + num_test
+    np.savetxt(f'train_x_all_run{r}_ts{time_step:04d}.csv', data_ab.train_x_all, delimiter=',')      # Domain points + BC points + IC points
+    np.savetxt(f'train_x_bc_run{r}_ts{time_step:04d}.csv', data_ab.train_x_bc, delimiter=',')        # BC points + IC points
+    np.savetxt(f'num_bcs_run{r}_ts{time_step:04d}.csv', data_ab.num_bcs, delimiter=',')              # Number of BC points + IC points
+    np.savetxt(f'train_x_run{r}_ts{time_step:04d}.csv', data_ab.train_x, delimiter=',')              # train_x = train_x_bc + train_x_all
+    np.savetxt(f'test_x_run{r}_ts{time_step:04d}.csv', data_ab.test_x, delimiter=',')                # test_x = train_x_bc + num_test

@@ -60,8 +60,8 @@ outl = 4			# number of elements at the output layer
 act_func = "tanh"		# activation function
 w_init = "Glorot normal"	# weight initializer method
 
-# Number of iterations to run the model
-niter = 10
+# Number of runs
+nrun = 10
 
 # Model compilation and training parameters
 # 1st stage
@@ -71,14 +71,14 @@ a1 = 1							# weight attributed to the residuals of the NS equations
 a2 = 1                                            	# weight attributed to the boundary conditions
 a3 = 1							# weight attributed to the initial conditions
 lossw1 = [a1, a1, a1, a1, a2, a2, a2, a3, a3, a3]	# loss weights
-nepochs1 = 10000000					# number of epochs per iteration
+niters1 = 10000000					# number of iterations per run
 # 2nd stage
 opt2 = "L-BFGS"
 lossw2 = [a1, a1, a1, a1, a2, a2, a2, a3, a3, a3]
-nepochs2 = 1000
+niters2 = 1000
 
-# Print losses in intervals of 'stepoch' epochs
-stepoch = 10
+# Print losses in intervals of 'step_iter' iterations
+step_iter = 10
 
 # Save additional files (0: no; 1: yes)
 save_additional = 0
