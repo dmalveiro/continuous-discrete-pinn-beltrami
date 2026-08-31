@@ -466,7 +466,7 @@ The directory structure for this project reflects the procedure used for trainin
 - `DT_PINN/` contains the discrete-time PINN implementations.
 - `V_PINN/` contains the continuous-time (or vanilla) PINN implementations.
 - `beltrami_*_0/` through `beltrami_*_3/` correspond to the four identical GPUs (GPU number 0 to 3) used to run four different case studies in parallel. Each of these folders contain the codes needed to run the experiments.
-- `RUN_*/` is a naming convention stating the hyperparameter combination used for each case study, from left to right in the folder naming: number of training points, activation function, initial learning rate. This is where the training sets and the training times for the experiments are stored.
+- `RUN_*/` is a naming convention stating the hyperparameter combination used for each case study, from left to right in the folder naming: number of training points, activation function, initial learning rate (`1e_3` = 10^{-3}, `1e_4` = 10^{-4}, `1e_5` = 10^{-5}). This is where the training sets and the training times for the experiments are stored.
 - `CSV_post_processing/` contains the processed data directly used to generate the accuracy and convergence results presented in the report.
 - `memory_usage/` contains the memory usage registrations, in steps of 10 ms, during training.
 - `figures\` contains the figures present in this README.
@@ -538,12 +538,35 @@ The code was developed and the experiments were performed using the configuratio
 - **ML Backend:** PyTorch 2.9.1+cu126
 - **PINNs Framework:** DeepXDE 1.15.0
 
-The computations for the present work are performed in single precision, using a single GPU for training and inferencing. The codes are run in deterministic mode, meaning that for the same inputs, software and hardware configuration, the results results should be constant for every run. However, the exact code used for the report was later organized and some variable names were changed to facilitate its comprehension: the lastest version is the one available in this repository. While the operations and execution flow remain unchanged between both versions of the code, it was verified that, likely due to the modifications performed, some of the results shown in the report may not be reproducible by the code available, even if using the exact same hardware and software configuration written above.
+The computations for the present work were performed in single precision, with a single GPU for training and inference, and using the Linux Command Line as the coding and execution environment. The codes were run in deterministic mode, meaning that for the same inputs, software and hardware configuration, the results should be identical across runs.
+
+The code used for the report in annex was later organized and some variable names were modified to improve readability. The lastest version is the one available in this repository. While the underlying operations and execution flow were kept unchanged between the two versions (as intended), it was verified that some of the results reported in the document could not be reproducible by the current code version, even if using the exact same hardware and software configuration written above. This discrepancy may be related to the code modifications introduced during the reorganization.
 
 ## Installing and running the code
 
-To install the 
+Consult the [DeepXDE GitHub repository](https://github.com/lululxvi/deepxde) and the [DeepXDE Install and Setup](https://deepxde.readthedocs.io/en/latest/user/installation.html) documentation section for instructions on installing the software packages needed to run the codes.
 
+After installing the software, go to the folder where the file `model.py` from the DeepXDE source code is placed. This location depends on the path chosen for installation; in my case, the location is:
+
+    ~/.conda/envs/dde-hvd-2004/lib/python3.10/site-packages/deepxde
+
+where `dde-hvd-2004` is my current conda environment. Copy `model_ORIGINAL.py` and `model_MOD.py` to that path. Verify that `model.py` is identical to `model_ORIGINAL.py` (which should be true if the DeepXDE version installed is 1.15.0).
+
+If the implementation selected is V-PINNs, keep the `model.py` in its standard form. Otherwise, copy `model_MOD.py` to `model.py` (remember that any file named differently than any of the source files does nothing regarding the DeepXDE execution). In lines 456 and 457 of `model_MOD.py` one can find the ALW parameters `alpha` and `checkpoint` (moving average constant and update interval, respectively) which are already set according to the report.
+
+To run the code, go to the downloaded folders from the project, namely:
+
+    continuous-discrete-pinn-beltrami/A/B/C/
+
+where A = `fixed_weights` or `variable_weights`, B = `V_PINN` or `DT_PINN` and C = `beltrami_DT_PINN_0`, `beltrami_DT_PINN_1`, `beltrami_DT_PINN_2`, or `beltrami_DT_PINN_3`, depending on the implementation and hyperparameter combination desired (from the ones reported in the document).
+
+One can also find `param.py` (if B = `V_PINN`) or `prm.py` (if B = `DT_PINN`) which is where variables related to code execution, neural network size and parameters, number of iterations, training points, and others, are defined. These files serve the same purpose, despite the different naming, which is related to the ALW implementation. The user can choose between different pre-configured setups (from the report), by selecting the desired `beltrami_DT_PINN_*\` folder. If C = `beltrami_DT_PINN_0` or `beltrami_DT_PINN_1`, the user should also copy the respective file `prm_1000_*_*.py` or `param_1000_*_*.py` to `prm.py` or `param.py`. In the second line of `main.py`, the user may also need to modify the GPU number (or ID) to ensure connection to the GPU to be employed (if the machine has only one GPU, select "0"). Also, the user will find files `iterationsss_std.py` and `iterationsss_noprint.py`. Copy the former to `iterationsss.py` to save the loss history after training, to predict and evaluate the results for the trained model, to save the training times, and to save further results with `in_variables()`. If the user only desires to train the models (which was the option selected to measure the memory usage during training), copy `iterationsss_noprint.py` to `iterationsss.py`.
+
+Inside any `beltrami_DT_PINN_*\` folder, go to the respective `RUN_*_*\` file and run the code, by writing the command:
+
+    python3 ../main.py
+
+and wait until the execution is complete. When finished, the user can find 
 
 ## References
 
