@@ -8,7 +8,7 @@ The work compares the continuous-time or vanilla PINNs (V-PINNs) with discrete-t
 
 The experiments investigate model accuracy, convergence and performance across the case studies considered.
 
-## Codes and instruction flow
+## Codes and execution flow
 
 This project uses the [DeepXDE](https://github.com/lululxvi/deepxde) framework [1]. The `model.py` file from DeepXDE source code is modified (see `model_MOD.py`) to implement the ALW algorithm.
 
@@ -39,7 +39,7 @@ When the inference and evaluation for the time step `i` is completed, function `
 <details>
 <summary><strong>Click to view the detailed V-PINN code execution and function-call flow.</strong></summary>
 
-<img src="figures/vpinn_scheme.png" alt="Detailed V-PINN code flow" width="1000">
+<img src="figures/vpinn_scheme.png" alt="Detailed V-PINN code flow" width="500">
 
 </details>
 
@@ -54,13 +54,13 @@ Note that for t=0, no residual is computed. The network for `model_a` is trained
 <details>
 <summary><strong>Click to view the detailed DT-PINN code execution and function-call flow.</strong></summary>
 
-<img src="figures/dtpinn_scheme.png" alt="Detailed V-PINN code flow" width="1000">
+<img src="figures/dtpinn_scheme.png" alt="Detailed V-PINN code flow" width="500">
 
 </details>
 
-In both cases, after code execution, many more statistics can be analysed by performing post-processing on the data that was saved during code execution, by running the code `post_processing_V_PINN.py` or `post_processing_DT_PINN.py`, depending on the case.
+In both cases, after code execution, many more statistics can be analysed by performing post-processing on the data that was saved during code execution, by running the code `post_processing_V_PINN.py` or `post_processing_DT_PINN.py`, depending on the case. Some of these statistics were directly used in the report and are referred in the "**Correspondence between results from the report and the data files**" section of this README.
 
-
+Hidden below (shown by clicking in "Function and module overview"), lies a table presenting the functions, the .py files where these are defined, and the purpose of these functions within the implementation considered (V-PINN or DT-PINN).
 
 <details>
 <summary><strong>Function and module overview</strong></summary>
@@ -411,8 +411,9 @@ In both cases, after code execution, many more statistics can be analysed by per
 
 </details>
 
-
 ## Directory Structure
+
+The directory structure for this project reflects the procedure used for training the models, namely, the 24 model implementations and hyperparameter combinations (case studies) analysed, while maximizing the usage of the hardware resources available. 
 
     continuous-discrete-pinn-beltrami/
     ├── fixed_weights/
@@ -460,21 +461,24 @@ In both cases, after code execution, many more statistics can be analysed by per
     ├── README.md
     └── LICENSE
 
-The directory structure reflects the procedure used for training the models, namely, the 24 model implementations and hyperparameter combinations (case studies) analysed, while maximizing the usage of the hardware resources available. 
-
 - `fixed_weights/` contains experiments using fixed loss weights.
 - `variable_weights/` contains experiments using adaptive/variable loss weights.
 - `DT_PINN/` contains the discrete-time PINN implementations.
 - `V_PINN/` contains the continuous-time (or vanilla) PINN implementations.
-- `beltrami_*_0` through `beltrami_*_3` correspond to the four identical GPUs (GPU number 0 to 3) used to run four different case studies in parallel. Each of these folders contain the codes needed to run the experiments.
-- `RUN_*` is a naming convention stating the hyperparameter combination used for each case study, from left to right in the folder naming: number of training points, activation function, initial learning rate. This is where the training sets and the training times for the experiments are stored.
+- `beltrami_*_0/` through `beltrami_*_3/` correspond to the four identical GPUs (GPU number 0 to 3) used to run four different case studies in parallel. Each of these folders contain the codes needed to run the experiments.
+- `RUN_*/` is a naming convention stating the hyperparameter combination used for each case study, from left to right in the folder naming: number of training points, activation function, initial learning rate. This is where the training sets and the training times for the experiments are stored.
 - `CSV_post_processing/` contains the processed data directly used to generate the accuracy and convergence results presented in the report.
 - `memory_usage/` contains the memory usage registrations, in steps of 10 ms, during training.
 - `figures\` contains the figures present in this README.
+- `model_MOD.py` is the modified `model.py` file from DeepXDE source code, where the ALW was implemented (besides some functions related to stopping criteria, not used for the report).
+- `model_ORIGINAL.py` is the standard, non-modified `model.py` file present in the DeepXDE version considered for this project, and used for the fixed loss weighting tests.
+- `tables_report.xlsx` contains the data and further post-processing needed to build the tables present in the report.
 
 For example, the data files stored at `continuous-discrete-pinn-beltrami/V_PINN/beltrami_V_PINN_1/RUN_1000_sigmoid_1e_5` correspond to the case study where the model was trained with vanilla PINNs, using GPU number 1, with sigmoid activation function and initial learning rate equal to $10^{-5}$.
 
 ## Correspondence between results from the report and the data files
+
+The correspondence between the the figures or tables from which the results are extracted and the output files of `post_processing_V_PINN.py` or `post_processing_DT_PINN.py` (or the .xlsx file) is presented below.
 
 Figure 2:
 - `continuous-discrete-pinn-beltrami/*_weights/V_PINN/beltrami_V_PINN_*/RUN_1000_*/CSV_post_processing/min_max_total_losses.csv`
@@ -534,9 +538,11 @@ The code was developed and the experiments were performed using the configuratio
 - **ML Backend:** PyTorch 2.9.1+cu126
 - **PINNs Framework:** DeepXDE 1.15.0
 
-The computations for the present work are performed in single precision, using a single GPU for training and inferencing.
+The computations for the present work are performed in single precision, using a single GPU for training and inferencing. The codes are run in deterministic mode, meaning that for the same inputs, software and hardware configuration, the results results should be constant for every run. However, the exact code used for the report was later organized and some variable names were changed to facilitate its comprehension: the lastest version is the one available in this repository. While the operations and execution flow remain unchanged between both versions of the code, it was verified that, likely due to the modifications performed, some of the results shown in the report may not be reproducible by the code available, even if using the exact same hardware and software configuration written above.
 
+## Installing and running the code
 
+To install the 
 
 
 ## References
