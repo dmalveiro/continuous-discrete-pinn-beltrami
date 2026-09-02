@@ -2,7 +2,7 @@
 
 This repository comprises the code and the data files containing the computational results reported in the annexed .pdf document, titled **Benchmarking Continuous and Discrete-Time PINNs on the Three-Dimensional Beltrami Flow**. Readers are encouraged to consult this document for a complete description of the motivation, concepts, methodology, implementation, metrics and results underlying this repository, besides plans for future work.
 
-This repository represents the culmination of the research work developed during the first year of my Ph.D. in Electrical and Computer Engineering, and corresponds to the final research project developed during that period. The work should be understood primarily as a research study of Physics-Informed Neural Networks (PINNs) with multilayer perceptron (MLP) architecture, together with some optimization approaches present in the literature and referenced in the annexed report. Therefore, the implementations and results presented here should be seen as a research baseline for the subsequent research work, intended to improve and accelerate the training of PINNs for complex transient physics (such as the Navier-Stokes equations), and as the outcome of this initial investigation, rather than as a final or fully optimized PINN implementation.
+This repository represents the culmination of the research work developed during the first year of my Ph.D. in Electrical and Computer Engineering, and corresponds to the final research project developed during that period. The work should be understood primarily as a research study of Physics-Informed Neural Networks (PINNs) with multilayer perceptron (MLP) architecture, together with some optimization approaches present in the literature and referenced in the annexed .pdf report. Therefore, the implementations and results presented here should be seen as a research baseline for the subsequent research work, intended to improve and accelerate the training of PINNs for complex transient physics (such as the Navier-Stokes equations), and as the outcome of this initial investigation, rather than as a final or fully optimized PINN implementation.
 
 ## Overview
 
@@ -524,9 +524,9 @@ The directory structure for this project, presented in the scheme below, reflect
 
 For example, the data files stored at `continuous-discrete-pinn-beltrami/V_PINN/beltrami_V_PINN_1/RUN_1000_sigmoid_1e_5` correspond to the case study where the model was trained with vanilla PINNs, using GPU number 1, with sigmoid activation function and initial learning rate equal to $10^{-5}$.
 
-## Correspondence between results from the report and the data files
+## Correspondence between results from the PDF report and the data files
 
-The correspondence between the figures and tables from the report in annex and the output files of `post_processing_V_PINN.py` or `post_processing_DT_PINN.py` (or the .xlsx file) is presented below.
+The correspondence between the figures and tables from the .pdf report in annex and the output files of `post_processing_V_PINN.py` or `post_processing_DT_PINN.py` (or the .xlsx file) is presented below.
 
 Figure 2:
 - `continuous-discrete-pinn-beltrami/*_weights/V_PINN/beltrami_V_PINN_*/RUN_1000_*/CSV_post_processing/min_max_total_losses.csv`
