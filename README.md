@@ -1,6 +1,6 @@
 # Benchmarking Continuous and Discrete-Time PINNs on the Three-Dimensional Beltrami Flow
 
-This repository comprises the code and the data files containing the computational results reported in the annexed document, titled **Benchmarking Continuous and Discrete-Time PINNs on the Three-Dimensional Beltrami Flow**. Readers are encouraged to consult this document for a complete description of the motivation, concepts, methodology, implementation, metrics and results underlying this repository, besides plans for future work.
+This repository comprises the code and the data files containing the computational results reported in the annexed .pdf document, titled **Benchmarking Continuous and Discrete-Time PINNs on the Three-Dimensional Beltrami Flow**. Readers are encouraged to consult this document for a complete description of the motivation, concepts, methodology, implementation, metrics and results underlying this repository, besides plans for future work.
 
 This repository represents the culmination of the research work developed during the first year of my Ph.D. in Electrical and Computer Engineering, and corresponds to the final research project developed during that period. The work should be understood primarily as a research study of Physics-Informed Neural Networks (PINNs) with multilayer perceptron (MLP) architecture, together with some optimization approaches present in the literature and referenced in the annexed report. Therefore, the implementations and results presented here should be seen as a research baseline for the subsequent research work, intended to improve and accelerate the training of PINNs for complex transient physics (such as the Navier-Stokes equations), and as the outcome of this initial investigation, rather than as a final or fully optimized PINN implementation.
 
@@ -64,45 +64,6 @@ Figure 1 (below) shows the execution flow charts presenting the core operations 
 In both V-PINN and DT-PINN implementations, the execution starts in `main.py`, with a function call to `iterationsss()`, which is where the instructions and other function calls needed to run the code are placed according to the instruction flow. The operations inside function `iterationsss()` (except for the test set definition in DT-PINN, by calling the `create_mesh()` function) run in loop for a user-defined `nruns` number of runs.
 
 Hidden below (shown by clicking in "Function and module overview"), lies Tab. 2, presenting the functions, the `.py` files where these are defined, and the purpose of these functions within the implementation considered (V-PINN or DT-PINN).
-
-<style type="text/css">
-.tg  {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
-.tg td,
-.tg th {
-  border-color: black;
-  border-style: solid;
-  border-width: 1px;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  overflow: hidden;
-  padding: 10px 5px;
-  word-break: normal;
-  text-align: center;
-}
-
-/* Function / operation and File columns */
-.tg td:nth-child(1),
-.tg td:nth-child(2),
-.tg th {
-  vertical-align: middle;
-}
-
-/* Purpose columns */
-.tg td:nth-child(3),
-.tg td:nth-child(4) {
-  vertical-align: top;
-}
-
-/* Bold cells */
-.tg .tg-7btt,
-.tg .tg-amwm {
-  font-weight: bold;
-}
-</style>
 
 <details>
 <summary><strong>Function and module overview</strong></summary>
@@ -544,6 +505,7 @@ The directory structure for this project, presented in the scheme below, reflect
     ├── model_MOD.py
     ├── model_ORIGINAL.py
     ├── tables_report.xlsx
+    ├── Report_continuous-discrete-pinn-beltrami.pdf
     └── README.md
 
 - `fixed_weights/` contains experiments using fixed loss weights.
@@ -558,6 +520,7 @@ The directory structure for this project, presented in the scheme below, reflect
 - `model_MOD.py` is the modified `model.py` file from DeepXDE source code, where the ALW was implemented (besides some functions related to stopping criteria which were not used for the report).
 - `model_ORIGINAL.py` is the standard, non-modified `model.py` file present in the DeepXDE version considered for this project, and used for the fixed loss weighting tests.
 - `tables_report.xlsx` contains the data and further post-processing needed to build the tables present in the report.
+- `Report_continuous-discrete-pinn-beltrami.pdf` is the report titled **Benchmarking Continuous and Discrete-Time PINNs on the Three-Dimensional Beltrami Flow**. 
 
 For example, the data files stored at `continuous-discrete-pinn-beltrami/V_PINN/beltrami_V_PINN_1/RUN_1000_sigmoid_1e_5` correspond to the case study where the model was trained with vanilla PINNs, using GPU number 1, with sigmoid activation function and initial learning rate equal to $10^{-5}$.
 
@@ -766,7 +729,7 @@ The code was developed and the experiments were performed using the configuratio
 
 The computations for the present work were performed in single precision, with a single GPU for training and inference, and using the Linux command line as the development and execution environment. The codes were run in deterministic mode, meaning that for the same inputs, software and hardware configuration, the results should be identical across runs.
 
-The code used to produce the results presented in the attached report was later reorganized and some variable names were modified to improve readability. The lastest version is the one available in this repository. While the underlying operations and execution flow were kept unchanged between the two versions, it was verified that some of the results reported in the document could not be reproduced by the current code version, even if using the exact same hardware and software configuration written above. This discrepancy may be related to the code modifications introduced during the reorganization.
+The code used to produce the results presented in the attached report was later reorganized and some variable names were modified to improve readability. The lastest version is the one available in this repository. While the underlying operations and execution flow were kept unchanged between the two versions, it was verified that some of the results reported in the .pdf document could not be reproduced by the current code version, even if using the exact same hardware and software configuration written above. This discrepancy may be related to the code modifications introduced during the reorganization.
 
 ## Installing, running the code and main outputs
 
@@ -784,7 +747,7 @@ To run the code, go to the downloaded folders from the project, namely:
 
     continuous-discrete-pinn-beltrami/A/B/C/
 
-where A = `fixed_weights` or `variable_weights`, B = `V_PINN` or `DT_PINN` and C = `beltrami_DT_PINN_0`, `beltrami_DT_PINN_1`, `beltrami_DT_PINN_2`, or `beltrami_DT_PINN_3`, depending on the implementation and hyperparameter combination desired (from the ones reported in the document).
+where A = `fixed_weights` or `variable_weights`, B = `V_PINN` or `DT_PINN` and C = `beltrami_DT_PINN_0`, `beltrami_DT_PINN_1`, `beltrami_DT_PINN_2`, or `beltrami_DT_PINN_3`, depending on the implementation and hyperparameter combination desired (from the ones reported in the .pdf document).
 
 One can also find `param.py` (if B = `V_PINN`) or `prm.py` (if B = `DT_PINN`) which is where variables related to code execution, neural network size and parameters, number of iterations, training points, and others, are defined. These files serve the same purpose, despite the different naming, which is related to the ALW implementation. The user can choose between different pre-configured setups (from the report), by selecting the desired `beltrami_DT_PINN_*/` folder. If C = `beltrami_DT_PINN_0` or `beltrami_DT_PINN_1`, the user should also copy the respective file `prm_1000_*_*.py` or `param_1000_*_*.py` to `prm.py` or `param.py`.
 
@@ -801,7 +764,7 @@ Inside the current `RUN_1000_*_*/` folder, the user can also perform further pro
     python3 ./post_processing_V_PINN.py
     python3 ./post_processing_DT_PINN.py
 
-These scripts use the loss files and `final_data.csv` file to produce new outputs, and are stored in the folder `CSV_post_processing/`. The `post_processing_DT_PINN.py` code will also produce `loss_X.dat` files, together with the existing loss files. For DT-PINN, each `loss_X.dat` is a vertical concatenation of the training loss values for each time step of the `X` run inside the `loss_runX_tsY.dat` files, and should not to be confused with the `loss_X.dat` from the V-PINN folders. As mentioned in the "**Correspondence between results from the report and the data files**" section, three of the new output files (produced by runnning `post_processing_V_PINN.py` or `post_processing_DT_PINN.py`), for each implementation, are directly used to report results in the document in annex.
+These scripts use the loss files and `final_data.csv` file to produce new outputs, and are stored in the folder `CSV_post_processing/`. The `post_processing_DT_PINN.py` code will also produce `loss_X.dat` files, together with the existing loss files. For DT-PINN, each `loss_X.dat` is a vertical concatenation of the training loss values for each time step of the `X` run inside the `loss_runX_tsY.dat` files, and should not to be confused with the `loss_X.dat` from the V-PINN folders. As mentioned in the "**Correspondence between results from the report and the data files**" section, three of the new output files (produced by runnning `post_processing_V_PINN.py` or `post_processing_DT_PINN.py`), for each implementation, are directly used to report results in the .pdf document in annex.
 
 ## References
 
