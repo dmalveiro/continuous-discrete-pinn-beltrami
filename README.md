@@ -611,61 +611,7 @@ Table V:
 
 Table 3 presents the metrics that each of the .csv files above contains at each column. To avoid the repetitive presentation of long names, "Ten-Run Average Unweighted" and "Ten-Run Average" are represented by, respectively, "TRAU" and "TRA".
 
-<style type="text/css">
-.tg  {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
 
-.tg td,
-.tg th {
-  border-color: black;
-  border-style: solid;
-  border-width: 1px;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  overflow: hidden;
-  padding: 10px 5px;
-  word-break: normal;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.tg .tg-fymr {
-  border-color: inherit;
-  font-weight: bold;
-  text-align: left;
-  vertical-align: middle;
-}
-
-.tg .tg-7btt {
-  border-color: inherit;
-  font-weight: bold;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.tg .tg-c3ow {
-  border-color: inherit;
-  text-align: center;
-  vertical-align: middle;
-}
-
-@media screen and (max-width: 767px) {
-  .tg {
-    width: auto !important;
-  }
-
-  .tg col {
-    width: auto !important;
-  }
-
-  .tg-wrap {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-}
-</style>
 
 <div class="tg-wrap">
 <table class="tg">
