@@ -611,7 +611,66 @@ Table V:
 
 Table 3 presents the metrics that each of the .csv files above contains at each column. To avoid the repetitive presentation of long names, "Ten-Run Average Unweighted" and "Ten-Run Average" are represented by, respectively, "TRAU" and "TRA".
 
+<p align="center">
+  <strong>Table 3.</strong> Main .csv files and their metrics.
+</p>
 
+<style type="text/css">
+.tg {
+  border-collapse: collapse;
+  border-spacing: 0;
+  min-width: 1700px;
+}
+
+.tg td,
+.tg th {
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+  padding: 10px 8px;
+  word-break: normal;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.tg .tg-fymr {
+  border-color: inherit;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.tg .tg-7btt {
+  border-color: inherit;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.tg .tg-c3ow {
+  border-color: inherit;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.tg-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media screen and (max-width: 767px) {
+  .tg {
+    width: auto !important;
+  }
+
+  .tg-wrap {
+    overflow-x: auto;
+  }
+}
+</style>
 
 <div class="tg-wrap">
 <table class="tg">
@@ -661,28 +720,23 @@ Table 3 presents the metrics that each of the .csv files above contains at each 
     <td class="tg-c3ow"><code>avg_res_l2errors_v2_time.py</code></td>
     <td class="tg-c3ow">nondimensional time instant</td>
     <td class="tg-c3ow">TRA residual average</td>
-    <td class="tg-c3ow">TRA L2 relative error (velocity <i>u</i>)</td>
-    <td class="tg-c3ow">TRA L2 relative error (velocity <i>v</i>)</td>
-    <td class="tg-c3ow">TRA L2 relative error (velocity <i>w</i>)</td>
-    <td class="tg-c3ow">TRA L2 relative error (velocity <i>p</i>)</td>
-    <td class="tg-c3ow">nondimensional time instant</td>
-    <td class="tg-c3ow">TRA residual average</td>
-    <td class="tg-c3ow">TRA L2 relative error (velocity <i>u</i>)</td>
-    <td class="tg-c3ow">TRA L2 relative error (velocity <i>v</i>)</td>
-    <td class="tg-c3ow">TRA L2 relative error (velocity <i>w</i>)</td>
-    <td class="tg-c3ow">TRA L2 relative error (velocity <i>p</i>)</td>
+    <td class="tg-c3ow">TRA L<sub>2</sub> relative error (u)</td>
+    <td class="tg-c3ow">TRA L<sub>2</sub> relative error (v)</td>
+    <td class="tg-c3ow">TRA L<sub>2</sub> relative error (w)</td>
+    <td class="tg-c3ow">TRA L<sub>2</sub> relative error (p)</td>
+    <td class="tg-c3ow" colspan="6">Identical to V-PINN</td>
   </tr>
 
   <tr>
     <td class="tg-c3ow"><code>avg_loss_components_ts0.py</code></td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
     <td class="tg-c3ow">iteration</td>
-    <td class="tg-c3ow">TRAU total loss</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">TRA total loss</td>
     <td class="tg-c3ow">—</td>
     <td class="tg-c3ow">—</td>
     <td class="tg-c3ow">—</td>
