@@ -1,6 +1,8 @@
 # Benchmarking Continuous and Discrete-Time PINNs on the Three-Dimensional Beltrami Flow
 
-This repository contains the code and the data files containing the computational results reported at the document in annex, titled **Benchmarking Continuous and Discrete-Time PINNs on the Three-Dimensional Beltrami Flow**. This document also presents a detailed explanation on the fundamental concepts behind the work, methodology, implementation and metrics used. It is advised to read it for a full understanding of the project here published.
+This repository comprises the code and the data files containing the computational results reported in the annexed document, titled **Benchmarking Continuous and Discrete-Time PINNs on the Three-Dimensional Beltrami Flow**. Readers are encouraged to consult this document for a complete description of the motivation, concepts, methodology, implementation, metrics and results underlying this repository, besides plans for future work.
+
+This repository represents the culmination of the research work developed during the first year of my Ph.D. in Electrical and Computer Engineering, and corresponds to the final research project developed during that period. The work should be understood primarily as a research study of Physics-Informed Neural Networks (PINNs) with multilayer perceptron (MLP) architecture, together with some optimization approaches present in the literature and referenced in the annexed report. Therefore, the implementations and results presented here should be seen as a research baseline for the subsequent research work, intended to improve and accelerate the training of PINNs for complex transient physics (such as the Navier-Stokes equations), and as the outcome of this initial investigation, rather than as a final or fully optimized PINN implementation.
 
 ## Overview
 
@@ -8,62 +10,106 @@ The work compares the continuous-time or vanilla PINNs (V-PINNs) with discrete-t
 
 The experiments investigate model accuracy, convergence and performance across the case studies considered.
 
-## Codes and execution flow
+## Code structure and execution flow
 
 This project uses the [DeepXDE](https://github.com/lululxvi/deepxde) framework [1]. The `model.py` file from DeepXDE source code is modified (see `model_MOD.py`) to implement the ALW algorithm.
 
 The implementation is based on the [Beltrami Flow example](https://github.com/lululxvi/deepxde/blob/master/examples/pinn_forward/Beltrami_flow.py) provided in the DeepXDE documentation, with substantial modifications to accomodate the project requirements. These can be seen in every `beltrami_*_0` through `beltrami_*_3` folder.
 
-In summary: this project starts from an existing implementation from DeepXDE, which was then transformed to support methodologies that are were not supported by that implementation. The table below presents a side-by-side comparison between the DeepXDE original work and the implementation here presented.
+In summary: this project starts from an existing implementation from DeepXDE, which was then transformed to support methodologies that are were not supported by the standard implementation. Table 1 (below) presents a side-by-side comparison between the DeepXDE original work and the implementation here presented.
 
-| Aspect | DeepXDE reference | My implementation |
-|---|---|---|
-| Beltrami flow | Continuous-time example | Continuous and discrete-time formulations |
-| Loss weighting | Fixed | Fixed and Adaptive weighting |
-| Code organization | Single script | Modular structure |
+<p align="center">
+  <strong>Table 1.</strong> Comprarison between the DeepXDE reference and this project's implementation.
+</p>
 
-In the image below one can see the execution flow charts presenting the core operations performed by the V-PINN (left) and DT-PINN (right) implementations, summarizing the codes present in every `beltrami_*_0` through `beltrami_*_3` folder.
+<div align="center">
+<table>
+  <thead>
+    <tr>
+      <th>Aspect</th>
+      <th>DeepXDE reference</th>
+      <th>This project's implementation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Beltrami flow</td>
+      <td>Continuous-time example</td>
+      <td>Continuous and discrete-time formulations</td>
+    </tr>
+    <tr>
+      <td>Loss weighting</td>
+      <td>Fixed</td>
+      <td>Fixed and Adaptive weighting</td>
+    </tr>
+    <tr>
+      <td>Code organization</td>
+      <td>Single script</td>
+      <td>Modular structure</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
-<img src="figures/flow_chart.png" alt="V-PINN and DT-PINN execution flow" width="700">
+Figure 1 (below) shows the execution flow charts presenting the core operations performed by the V-PINN (left) and DT-PINN (right) implementations, summarizing the codes present in every `beltrami_*_0` through `beltrami_*_3` folder.
+
+<p align="center">
+  <strong>Figure 1.</strong> V-PINN and DT-PINN execution flow.
+</p>
+
+<p align="center">
+  <img src="figures/flow_chart.png" alt="V-PINN and DT-PINN execution flow" width="800">
+</p>
 
 In both V-PINN and DT-PINN implementations, the execution starts in `main.py`, with a function call to `iterationsss()`, which is where the instructions and other function calls needed to run the code are placed according to the instruction flow. The operations inside function `iterationsss()` (except for the test set definition in DT-PINN, by calling the `create_mesh()` function) run in loop for a user-defined `nruns` number of runs.
 
-### V-PINN execution
+Hidden below (shown by clicking in "Function and module overview"), lies Tab. 2, presenting the functions, the `.py` files where these are defined, and the purpose of these functions within the implementation considered (V-PINN or DT-PINN).
 
-The function `create_model()` is called. Inside it, `create_training_set()` is called, where the training set `training_set_run{r}_ORI.csv` present in the respective `RUN_1000_*` folder is extracted for the current run `r`. Then, the problem definition is set by `dde.data.TimePDE()`: 3D transient Navier-Stokes equations subject to constraints: a space-time domain, boundary and initial conditions (Beltrami flow analytical solutions in the domain boundaries and at $t=0$, respectively). The PINN architecture is then defined and the model (`model`) is composed by the problem (`data`) plus the network (`net`). Back to `iterationsss()`: the PINN is then trained for a user defined number of iterations (i.e., number of times the network weights are updated) and the loss history is saved. 
+<style type="text/css">
+.tg  {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
 
-For each time step (or instant) `i`: the function `pred_exact()` is called, where the velocity and pressure fields are predicted in the test set from the trained model and these results are evaluated by computing the residuals and $L_2$ relative errors between the predicted and exact results in the test set. The residuals calculation, through the `pde()` function, involves computing many derivatives through automatic differentiation, which is a memory-consuming task, whose usage increases with the number of data points where these gradients are computed. As such, the three-dimensional test set (with `nx` * `ny` * `nz` points) is divided into `ny` 2D sub-domains (or slices) of `nx` * `nz` points. The residuals are then calculated in each sub-domain, are stored in memory, and the cached data regarding hessians and jacobians is clean (`dde.grad.clear()`), in a sequential process, avoiding data accumulation across the `ny` loops, saving memory resources compared to standard residuals calculation without domain slicing.
+.tg td,
+.tg th {
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+  padding: 10px 5px;
+  word-break: normal;
+  text-align: center;
+}
 
-When the inference and evaluation for the time step `i` is completed, function `in_variables()` is called, where the average values of the evaluated metrics are stored in `final_data` file. The cycle "inference-evaluation-storage" repeats for all time steps (until `n_dt`), and the execution ends. Optionally, the predicted, exact, relative errors and residuals at the test points can also be saved in csv files, which can be useful for visualizing results in software such as [Paraview](https://www.paraview.org/).
+/* Function / operation and File columns */
+.tg td:nth-child(1),
+.tg td:nth-child(2),
+.tg th {
+  vertical-align: middle;
+}
 
-<details>
-<summary><strong>Click to view the detailed V-PINN code execution and function-call flow.</strong></summary>
+/* Purpose columns */
+.tg td:nth-child(3),
+.tg td:nth-child(4) {
+  vertical-align: top;
+}
 
-<img src="figures/vpinn_scheme.png" alt="Detailed V-PINN code flow" width="500">
-
-</details>
-
-### DT-PINN execution
-
-The code execution is divided into two main stages: for initial time ($t=0$) and remaining time steps (t>0). The process is analogous to the V-PINN: the training set `training_set_run{r}_ORI.csv` present in the respective `RUN_1000_*` folder is extracted for the current run `r`, for `model_a`, corresponding to $t=0$. The initial-time problem is set by the function `dde.data.PDE()`: fitting the analytical solution at $t=0$. The full model (`model_a`) is the neural network (standard MLP, `net_a`) plus the problem to optimize (`data_a`), which is then trained and the loss history is saved. After training and saving, the solutions for $t=0$ are predicted from `model_a`, and these results are evaluated against the exact solutions through the $L_2$ relative error metric. Finally, the average values of the evaluated metrics are stored in `final_data` file.
-
-Then, for $t>0$, a similar process to the one described in the paragraph above is performed at each time step, sequentially, with some important differences. The problem to address for a time step `ib`, by calling `dde.data.PDE()`, is the 3D Navier-Stokes equations with a second-order midpoint time discretization (`pde()`), with boundary conditions given by the analytical solutions in the boundaries (`bc_ic()`). After the model (`model_b`) is fully defined, the weights and biases from the trained PINN of the previous time step are copied to the current PINN, and then it is trained. After training, lie the inference and evaluation stages.
-
-Note that for $t=0$, no residual is computed. The network for `model_a` is trained by minimizing the residuals of the initial condition constraint, rather than by minimizing the 3D Navier-Stokes equations at each time instant, for each `model_b`, at $t>0$. A residual computed at $t=0$ evaluates the mismatch between the predicted results and the analytical solution at that instant, and the residual computed at any instant $t>0$ quantifies the satisfaction of the Navier-Stokes equation. Therefore, there residuals represent different quantities and are not directly comparable. Besides, the accuracy of the predictions at $t=0$ is already assessed by the $L_2$ relative errors, making the residual calculation based on the initial condition a redundant operation.
-
-<details>
-<summary><strong>Click to view the detailed DT-PINN code execution and function-call flow.</strong></summary>
-
-<img src="figures/dtpinn_scheme.png" alt="Detailed V-PINN code flow" width="500">
-
-</details>
-
-In both cases, after code execution, many more statistics can be analysed by performing post-processing on the data that was saved during code execution, by running the code `post_processing_V_PINN.py` or `post_processing_DT_PINN.py`, depending on the case. Some of these statistics were directly used in the report and are referred in the "**Correspondence between results from the report and the data files**" section of this README.
-
-Hidden below (shown by clicking in "Function and module overview"), lies a table presenting the functions, the `.py` files where these are defined, and the purpose of these functions within the implementation considered (V-PINN or DT-PINN).
+/* Bold cells */
+.tg .tg-7btt,
+.tg .tg-amwm {
+  font-weight: bold;
+}
+</style>
 
 <details>
 <summary><strong>Function and module overview</strong></summary>
+
+<p align="center">
+  <strong>Table 2.</strong> Custom-made functions, main DeepXDE functions, their purpose, and the files where these are located. 
+</p>
 
 <div class="tg-wrap">
 <table class="tg">
@@ -89,7 +135,7 @@ Hidden below (shown by clicking in "Function and module overview"), lies a table
     <td class="tg-7btt">—</td>
     <td class="tg-c3ow"><code>main.py</code></td>
     <td class="tg-9wq8" colspan="2">
-      Entry point; calls <code>run_iterations()</code>.
+      Entry point; calls <code>run_iterations()</code>. This is also where the GPU is selected.
     </td>
   </tr>
 
@@ -289,10 +335,10 @@ Hidden below (shown by clicking in "Function and module overview"), lies a table
     <td class="tg-c3ow"><code>pred_exact()</code></td>
     <td class="tg-c3ow"><code>results.py</code></td>
     <td class="tg-c3ow">
-      Performs model inference at the test set and computes the PDE residuals and L2 relative errors.
+      Performs model inference at the test set and computes the PDE residuals and <i>L</i><sub>2</sub> relative errors.
     </td>
     <td class="tg-c3ow">
-      Infers the current model at the test set and computes the PDE residuals and L2 relative errors.
+      Infers the current model at the test set and computes the PDE residuals and <i>L</i><sub>2</sub> relative errors.
     </td>
   </tr>
 
@@ -310,7 +356,7 @@ Hidden below (shown by clicking in "Function and module overview"), lies a table
     <td class="tg-c3ow"><code>dde.metrics.l2_relative_error(a, b)</code></td>
     <td class="tg-c3ow"><code>results.py</code></td>
     <td class="tg-c3ow" colspan="2">
-      Computes the L2 relative error between variables <i>a</i> and <i>b</i>.
+      Computes the <i>L</i><sub>2</sub> relative error between variables <i>a</i> and <i>b</i>.
     </td>
   </tr>
 
@@ -411,9 +457,49 @@ Hidden below (shown by clicking in "Function and module overview"), lies a table
 
 </details>
 
+
+### V-PINN execution
+
+The function `create_model()` is called. Inside it, `create_training_set()` is called, where the training set `training_set_run{r}_ORI.csv` present in the respective `RUN_1000_*` folder is extracted for the current run `r`. Then, the problem definition is set by `dde.data.TimePDE()`, 3D transient Navier-Stokes equations subject to constraints: a space-time domain, boundary and initial conditions (Beltrami flow analytical solutions in the domain boundaries and at $t=0$, respectively). The PINN architecture is then defined and the model (`model`) is composed by the problem (`data`) plus the network (`net`). Back to `iterationsss()`: the PINN is then trained for a user defined number of iterations (i.e., number of times the network weights are updated) and the loss history is saved. 
+
+For each time step `i`: the function `pred_exact()` is called, where a forward pass is performed using the trained model to predict the velocity and pressure fields at the test points. In the evaluation stage, the predictions are then compared with the exact solution through the $L_2$ relative errors, while the PDE residuals are computed to assess the satisfaction of the governing equations at the same test points. The residuals calculation, through the `pde()` function, involves computing many derivatives through automatic differentiation, which is a memory-consuming task, whose usage increases with the number of data points where these gradients are computed. As such, the three-dimensional test set (with `nx` * `ny` * `nz` points) is divided into `ny` 2D sub-domains (or slices) of `nx` * `nz` points. The residuals are computed sequentially for each slice, and the cache containing Jacobians and Hessians is cleared (`dde.grad.clear()`). This prevents data accumulation across the `ny` iterations, reducing the memory required for residual calculation compared with evaluating the residuals over the entire three-dimensional test set at once.
+
+When the inference and evaluation for the time step `i` is completed, function `in_variables()` is called, where the average values of the evaluated metrics are stored in `final_data` file. The cycle "inference-evaluation-storage" repeats for all time steps (until `n_dt`), and the execution ends. Optionally, the predicted, exact, relative errors and residuals at the test points can also be saved in csv files, which can be useful for visualizing results in software such as [Paraview](https://www.paraview.org/).
+
+<details>
+<summary><strong>Click to view the detailed V-PINN code execution and function-call flow.</strong></summary>
+
+**Figure 2.** This scheme is a more detailed version of the left flow chart in Fig. 1. It shows the function-call hierarchy and main operations involved in the execution of the V-PINN code, including their interactions with DeepXDE functions (marked as `dde`).
+
+<img src="figures/vpinn_scheme.png" alt="Detailed V-PINN code flow" width="500">
+
+</details>
+
+### DT-PINN execution
+
+The code execution is divided into two main stages: for initial time ($t=0$) and remaining time steps (t>0). The process is analogous to the V-PINN: the training set `training_set_run{r}_ORI.csv` present in the respective `RUN_1000_*` folder is extracted for the current run `r`, for `model_a`, corresponding to $t=0$. The initial-time problem is set by the function `dde.data.PDE()`: fitting the analytical solution at $t=0$. The full model (`model_a`) is the neural network (standard MLP, `net_a`) plus the problem to optimize (`data_a`), which is then trained and the loss history is saved. After training and saving, the solutions for $t=0$ are predicted from `model_a`, and these results are evaluated against the exact solutions through the $L_2$ relative error metric. Finally, the average values of the evaluated metrics are stored in `final_data` file.
+
+Then, for $t>0$, a similar process to the one described in the paragraph above is performed at each time step, sequentially, with some important differences. The problem solved at time step `ib`, by calling `dde.data.PDE()`, is governed by the 3D Navier-Stokes equations with a second-order midpoint time discretization (`pde()`), with boundary conditions defined by the analytical solutions on the domain boundaries (`bc_ic()`). After the model (`model_b`) is fully defined, the weights and biases from the trained PINN of the previous time step are copied to the current PINN, which is then trained. After training, the inference and evaluation stages are performed.
+
+Note that for $t=0$, no residual is computed. The network for `model_a` is trained by minimizing the residuals of the initial condition constraint, rather than by minimizing the 3D Navier-Stokes equations at each time instant, for each `model_b`, at $t>0$. A residual computed at $t=0$ evaluates the mismatch between the predicted results and the analytical solution at that instant, and the residual computed at any instant $t>0$ quantifies the satisfaction of the Navier-Stokes equation. Therefore, these residuals represent different quantities and are not directly comparable. Besides, the accuracy of the predictions at $t=0$ is already assessed by the $L_2$ relative errors, making the residual calculation based on the initial condition a redundant operation.
+
+<details>
+<summary><strong>Click to view the detailed DT-PINN code execution and function-call flow.</strong></summary>
+
+**Figure 3.** This scheme is a more detailed version of the right flow chart in Fig. 1. It shows the function-call hierarchy and main operations involved in the execution of the DT-PINN code, including their interactions with DeepXDE functions (marked as `dde`).
+
+<img src="figures/dtpinn_scheme.png" alt="Detailed V-PINN code flow" width="500">
+
+</details>
+
+### After code execution
+
+In both V-PINN or DT-PINN cases, after code execution, many more statistics can be analysed by performing post-processing on the data that was saved during code execution, running the code `post_processing_V_PINN.py` or `post_processing_DT_PINN.py`, depending on the case. Some of these statistics were directly used in the report and are referred in the "**Correspondence between results from the report and the data files**" section of this README.
+
+
 ## Directory Structure
 
-The directory structure for this project reflects the procedure used for training the models, namely, the 24 model implementations and hyperparameter combinations (case studies) analysed, while maximizing the usage of the hardware resources available. 
+The directory structure for this project, presented in the scheme below, reflects the procedure used for training the models, namely, the 24 model implementations and hyperparameter combinations (case studies) analysed, while maximizing the use of the available hardware resources. The file structures of `fixed_weights/V_PINN/`, `variable_weights/DT_PINN/` and `variable_weights/V_PINN/` are analogous to that of `fixed_weights/DT_PINN/`, but are only partially shown to avoid an unnecessarily long and repetitive scheme.
 
     continuous-discrete-pinn-beltrami/
     ├── fixed_weights/
@@ -458,15 +544,14 @@ The directory structure for this project reflects the procedure used for trainin
     ├── model_MOD.py
     ├── model_ORIGINAL.py
     ├── tables_report.xlsx
-    ├── README.md
-    └── LICENSE
+    └── README.md
 
 - `fixed_weights/` contains experiments using fixed loss weights.
-- `variable_weights/` contains experiments using adaptive/variable loss weights.
+- `variable_weights/` contains experiments using adaptive loss weights.
 - `DT_PINN/` contains the discrete-time PINN implementations.
 - `V_PINN/` contains the continuous-time (or vanilla) PINN implementations.
 - `beltrami_*_0/` through `beltrami_*_3/` correspond to the four identical GPUs (GPU number 0 to 3) used to run four different case studies in parallel. Each of these folders contain the codes needed to run the experiments.
-- `RUN_*/` is a naming convention stating the hyperparameter combination used for each case study, from left to right in the folder naming: number of training points, activation function, initial learning rate (`1e_3` = $10^{-3}$, `1e_4` = $10^{-4}$, `1e_5` = $10^{-5}$). This is where the training sets and the training times for the experiments are stored.
+- `RUN_*/` is a naming convention stating the hyperparameter combination used for each case study, from left to right in the folder naming: number of training points, activation function, initial learning rate (`1e_3` = $10^{-3}$, `1e_4` = $10^{-4}$, `1e_5` = $10^{-5}$). This is where the training sets and the training times for the corresponding case studies are stored.
 - `CSV_post_processing/` contains the processed data directly used to generate the accuracy and convergence results presented in the report.
 - `memory_usage/` contains the memory usage registrations, in steps of 10 ms, during training.
 - `figures/` contains the figures present in this README.
@@ -478,7 +563,7 @@ For example, the data files stored at `continuous-discrete-pinn-beltrami/V_PINN/
 
 ## Correspondence between results from the report and the data files
 
-The correspondence between the the figures or tables from which the results are extracted and the output files of `post_processing_V_PINN.py` or `post_processing_DT_PINN.py` (or the .xlsx file) is presented below.
+The correspondence between the figures and tables from the report in annex and the output files of `post_processing_V_PINN.py` or `post_processing_DT_PINN.py` (or the .xlsx file) is presented below.
 
 Figure 2:
 - `continuous-discrete-pinn-beltrami/*_weights/V_PINN/beltrami_V_PINN_*/RUN_1000_*/CSV_post_processing/min_max_total_losses.csv`
@@ -524,6 +609,166 @@ Table V:
 - `continuous-discrete-pinn-beltrami/memory_usage/vram_*_dtpinn_*.csv`
 - `continuous-discrete-pinn-beltrami/tables_report.xlsx` (tab "performance")
 
+Table 3 presents the metrics that each of the .csv files above contains at each column. To avoid the repetitive presentation of long names, "Ten-Run Average Unweighted" and "Ten-Run Average" are represented by, respectively, "TRAU" and "TRA".
+
+<style type="text/css">
+.tg  {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.tg td,
+.tg th {
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+  padding: 10px 5px;
+  word-break: normal;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.tg .tg-fymr {
+  border-color: inherit;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.tg .tg-7btt {
+  border-color: inherit;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.tg .tg-c3ow {
+  border-color: inherit;
+  text-align: center;
+  vertical-align: middle;
+}
+
+@media screen and (max-width: 767px) {
+  .tg {
+    width: auto !important;
+  }
+
+  .tg col {
+    width: auto !important;
+  }
+
+  .tg-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+</style>
+
+<div class="tg-wrap">
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-fymr"></th>
+    <th class="tg-7btt" colspan="6">V-PINN</th>
+    <th class="tg-7btt" colspan="6">DT-PINN</th>
+  </tr>
+</thead>
+
+<tbody>
+
+  <tr>
+    <td class="tg-7btt">Python files / columns</td>
+    <td class="tg-7btt">column 0</td>
+    <td class="tg-7btt">column 1</td>
+    <td class="tg-7btt">column 2</td>
+    <td class="tg-7btt">column 3</td>
+    <td class="tg-7btt">column 4</td>
+    <td class="tg-7btt">column 5</td>
+    <td class="tg-7btt">column 0</td>
+    <td class="tg-7btt">column 1</td>
+    <td class="tg-7btt">column 2</td>
+    <td class="tg-7btt">column 3</td>
+    <td class="tg-7btt">column 4</td>
+    <td class="tg-7btt">column 5</td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>avg_loss_components.py</code></td>
+    <td class="tg-c3ow">iteration</td>
+    <td class="tg-c3ow">TRAU total loss</td>
+    <td class="tg-c3ow">TRAU residual loss</td>
+    <td class="tg-c3ow">TRAU BC loss</td>
+    <td class="tg-c3ow">TRAU IC loss</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">iteration</td>
+    <td class="tg-c3ow">TRAU total loss</td>
+    <td class="tg-c3ow">TRAU residual loss</td>
+    <td class="tg-c3ow">TRAU BC loss</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>avg_res_l2errors_v2_time.py</code></td>
+    <td class="tg-c3ow">nondimensional time instant</td>
+    <td class="tg-c3ow">TRA residual average</td>
+    <td class="tg-c3ow">TRA L2 relative error (velocity <i>u</i>)</td>
+    <td class="tg-c3ow">TRA L2 relative error (velocity <i>v</i>)</td>
+    <td class="tg-c3ow">TRA L2 relative error (velocity <i>w</i>)</td>
+    <td class="tg-c3ow">TRA L2 relative error (velocity <i>p</i>)</td>
+    <td class="tg-c3ow">nondimensional time instant</td>
+    <td class="tg-c3ow">TRA residual average</td>
+    <td class="tg-c3ow">TRA L2 relative error (velocity <i>u</i>)</td>
+    <td class="tg-c3ow">TRA L2 relative error (velocity <i>v</i>)</td>
+    <td class="tg-c3ow">TRA L2 relative error (velocity <i>w</i>)</td>
+    <td class="tg-c3ow">TRA L2 relative error (velocity <i>p</i>)</td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>avg_loss_components_ts0.py</code></td>
+    <td class="tg-c3ow">iteration</td>
+    <td class="tg-c3ow">TRAU total loss</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+  </tr>
+
+  <tr>
+    <td class="tg-c3ow"><code>min_max_total_losses.py</code></td>
+    <td class="tg-c3ow">iteration</td>
+    <td class="tg-c3ow">
+      minimum total loss<br>
+      across all training sets
+    </td>
+    <td class="tg-c3ow">
+      maximum total loss<br>
+      across all training sets
+    </td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+    <td class="tg-c3ow">—</td>
+  </tr>
+
+</tbody>
+</table>
+</div>
+
 ## Hardware and Software setup
 
 The code was developed and the experiments were performed using the configuration below:
@@ -542,7 +787,7 @@ The computations for the present work were performed in single precision, with a
 
 The code used to produce the results presented in the attached report was later reorganized and some variable names were modified to improve readability. The lastest version is the one available in this repository. While the underlying operations and execution flow were kept unchanged between the two versions, it was verified that some of the results reported in the document could not be reproduced by the current code version, even if using the exact same hardware and software configuration written above. This discrepancy may be related to the code modifications introduced during the reorganization.
 
-## Installing and running the code
+## Installing, running the code and main outputs
 
 Consult the [DeepXDE GitHub repository](https://github.com/lululxvi/deepxde) and the [DeepXDE Install and Setup](https://deepxde.readthedocs.io/en/latest/user/installation.html) documentation section for instructions on installing the software packages needed to run the codes.
 
@@ -560,7 +805,9 @@ To run the code, go to the downloaded folders from the project, namely:
 
 where A = `fixed_weights` or `variable_weights`, B = `V_PINN` or `DT_PINN` and C = `beltrami_DT_PINN_0`, `beltrami_DT_PINN_1`, `beltrami_DT_PINN_2`, or `beltrami_DT_PINN_3`, depending on the implementation and hyperparameter combination desired (from the ones reported in the document).
 
-One can also find `param.py` (if B = `V_PINN`) or `prm.py` (if B = `DT_PINN`) which is where variables related to code execution, neural network size and parameters, number of iterations, training points, and others, are defined. These files serve the same purpose, despite the different naming, which is related to the ALW implementation. The user can choose between different pre-configured setups (from the report), by selecting the desired `beltrami_DT_PINN_*/` folder. If C = `beltrami_DT_PINN_0` or `beltrami_DT_PINN_1`, the user should also copy the respective file `prm_1000_*_*.py` or `param_1000_*_*.py` to `prm.py` or `param.py`. In the second line of `main.py`, the user may also need to modify the GPU number (or ID) to ensure connection to the GPU to be employed (if the machine has only one GPU, select "0"). Also, the user will find files `iterationsss_std.py` and `iterationsss_noprint.py`. Copy `iterationsss_std.py` to `iterationsss.py` to run the full workflow, which, besides training, includes loss-history saving, post-training inference, residual and error calculation, training-time recording, and additional data storage with `in_variables()`. If the user only desires to train the models (which was the option selected to measure the memory usage during training), copy `iterationsss_noprint.py` to `iterationsss.py`.
+One can also find `param.py` (if B = `V_PINN`) or `prm.py` (if B = `DT_PINN`) which is where variables related to code execution, neural network size and parameters, number of iterations, training points, and others, are defined. These files serve the same purpose, despite the different naming, which is related to the ALW implementation. The user can choose between different pre-configured setups (from the report), by selecting the desired `beltrami_DT_PINN_*/` folder. If C = `beltrami_DT_PINN_0` or `beltrami_DT_PINN_1`, the user should also copy the respective file `prm_1000_*_*.py` or `param_1000_*_*.py` to `prm.py` or `param.py`.
+
+In the second line of `main.py`, the user may also need to modify the GPU number (or ID) to ensure connection to the GPU to be employed (if the machine has only one GPU, select "0"). Also, the user will find files `iterationsss_std.py` and `iterationsss_noprint.py`. Copy `iterationsss_std.py` to `iterationsss.py` to run the full workflow, which, besides training, includes loss-history saving, post-training inference, residual and error calculation, training-time recording, and additional data storage with `in_variables()`. If the user only desires to train the models (which was the option selected to measure the memory usage during training), copy `iterationsss_noprint.py` to `iterationsss.py`.
 
 Inside any `beltrami_DT_PINN_*/` folder, go to the respective `RUN_1000_*_*/` folder and run the code, by writing the command:
 
@@ -573,8 +820,7 @@ Inside the current `RUN_1000_*_*/` folder, the user can also perform further pro
     python3 ./post_processing_V_PINN.py
     python3 ./post_processing_DT_PINN.py
 
-which uses the loss files and `final_data.csv` file to produce new outputs, which are stored in the folder `CSV_post_processing/`.
-As mentioned in the "Correspondence between results from the report and the data files" section, three of these new output files are directly used to report results in the document in annex, whose content is also explained.
+These scripts use the loss files and `final_data.csv` file to produce new outputs, and are stored in the folder `CSV_post_processing/`. The `post_processing_DT_PINN.py` code will also produce `loss_X.dat` files, together with the existing loss files. For DT-PINN, each `loss_X.dat` is a vertical concatenation of the training loss values for each time step of the `X` run inside the `loss_runX_tsY.dat` files, and should not to be confused with the `loss_X.dat` from the V-PINN folders. As mentioned in the "**Correspondence between results from the report and the data files**" section, three of the new output files (produced by runnning `post_processing_V_PINN.py` or `post_processing_DT_PINN.py`), for each implementation, are directly used to report results in the document in annex.
 
 ## References
 
