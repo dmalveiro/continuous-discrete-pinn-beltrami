@@ -615,158 +615,139 @@ Table 3 presents the metrics that each of the .csv files above contains at each 
   <strong>Table 3.</strong> Main .csv files and their metrics.
 </p>
 
-<style type="text/css">
-.tg {
-  border-collapse: collapse;
-  border-spacing: 0;
-  min-width: 1700px;
-}
-
-.tg td,
-.tg th {
-  border-color: black;
-  border-style: solid;
-  border-width: 1px;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  overflow: hidden;
-  padding: 10px 8px;
-  word-break: normal;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.tg .tg-fymr {
-  border-color: inherit;
-  font-weight: bold;
-  text-align: left;
-  vertical-align: middle;
-}
-
-.tg .tg-7btt {
-  border-color: inherit;
-  font-weight: bold;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.tg .tg-c3ow {
-  border-color: inherit;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.tg-wrap {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-@media screen and (max-width: 767px) {
-  .tg {
-    width: auto !important;
-  }
-
-  .tg-wrap {
-    overflow-x: auto;
-  }
-}
-</style>
-
+<div align="center">
 <div class="tg-wrap">
 <table class="tg">
 <thead>
   <tr>
-    <th class="tg-fymr"></th>
-    <th class="tg-7btt" colspan="6">V-PINN</th>
-    <th class="tg-7btt" colspan="6">DT-PINN</th>
+    <th align="center" valign="middle"></th>
+    <th align="center" valign="middle"></th>
+    <th align="center" valign="middle" colspan="2"><strong>Implementation</strong></th>
   </tr>
 </thead>
 
 <tbody>
 
   <tr>
-    <td class="tg-7btt">Python files / columns</td>
-    <td class="tg-7btt">column 0</td>
-    <td class="tg-7btt">column 1</td>
-    <td class="tg-7btt">column 2</td>
-    <td class="tg-7btt">column 3</td>
-    <td class="tg-7btt">column 4</td>
-    <td class="tg-7btt">column 5</td>
-    <td class="tg-7btt">column 0</td>
-    <td class="tg-7btt">column 1</td>
-    <td class="tg-7btt">column 2</td>
-    <td class="tg-7btt">column 3</td>
-    <td class="tg-7btt">column 4</td>
-    <td class="tg-7btt">column 5</td>
+    <th align="center" valign="middle">Python file</th>
+    <th align="center" valign="middle">column</th>
+    <th align="center" valign="middle">V-PINN</th>
+    <th align="center" valign="middle">DT-PINN</th>
   </tr>
 
   <tr>
-    <td class="tg-c3ow"><code>avg_loss_components.py</code></td>
-    <td class="tg-c3ow">iteration</td>
-    <td class="tg-c3ow">TRAU total loss</td>
-    <td class="tg-c3ow">TRAU residual loss</td>
-    <td class="tg-c3ow">TRAU BC loss</td>
-    <td class="tg-c3ow">TRAU IC loss</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">iteration</td>
-    <td class="tg-c3ow">TRAU total loss</td>
-    <td class="tg-c3ow">TRAU residual loss</td>
-    <td class="tg-c3ow">TRAU BC loss</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-  </tr>
-
-  <tr>
-    <td class="tg-c3ow"><code>avg_res_l2errors_v2_time.py</code></td>
-    <td class="tg-c3ow">nondimensional time instant</td>
-    <td class="tg-c3ow">TRA residual average</td>
-    <td class="tg-c3ow">TRA L<sub>2</sub> relative error (u)</td>
-    <td class="tg-c3ow">TRA L<sub>2</sub> relative error (v)</td>
-    <td class="tg-c3ow">TRA L<sub>2</sub> relative error (w)</td>
-    <td class="tg-c3ow">TRA L<sub>2</sub> relative error (p)</td>
-    <td class="tg-c3ow" colspan="6">Identical to V-PINN</td>
-  </tr>
-
-  <tr>
-    <td class="tg-c3ow"><code>avg_loss_components_ts0.py</code></td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">iteration</td>
-    <td class="tg-c3ow">TRA total loss</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-  </tr>
-
-  <tr>
-    <td class="tg-c3ow"><code>min_max_total_losses.py</code></td>
-    <td class="tg-c3ow">iteration</td>
-    <td class="tg-c3ow">
-      minimum total loss<br>
-      across all training sets
+    <td align="center" valign="middle" rowspan="5">
+      <code>avg_loss_components.py</code>
     </td>
-    <td class="tg-c3ow">
-      maximum total loss<br>
-      across all training sets
+    <td align="center" valign="middle">0</td>
+    <td align="center" valign="middle" colspan="2">iteration</td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="middle">1</td>
+    <td align="center" valign="middle" colspan="2">TRAU total loss</td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="middle">2</td>
+    <td align="center" valign="middle" colspan="2">TRAU residual loss</td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="middle">3</td>
+    <td align="center" valign="middle" colspan="2">TRAU boundary condition loss</td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="middle">4</td>
+    <td align="center" valign="middle">TRAU initial condition loss</td>
+    <td align="center" valign="middle">—</td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="middle" rowspan="6">
+      <code>avg_res_l2errors_v2_time.py</code>
     </td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
-    <td class="tg-c3ow">—</td>
+    <td align="center" valign="middle">0</td>
+    <td align="center" valign="middle" colspan="2">nondimensional time instant</td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="middle">1</td>
+    <td align="center" valign="middle" colspan="2">TRA residuals average</td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="middle">2</td>
+    <td align="center" valign="middle" colspan="2">
+      TRA L2 relative error (velocity <i>u</i>)
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="middle">3</td>
+    <td align="center" valign="middle" colspan="2">
+      TRA L2 relative error (velocity <i>v</i>)
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="middle">4</td>
+    <td align="center" valign="middle" colspan="2">
+      TRA L2 relative error (velocity <i>w</i>)
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="middle">5</td>
+    <td align="center" valign="middle" colspan="2">
+      TRA L2 relative error (velocity <i>p</i>)
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="middle" rowspan="2">
+      <code>avg_loss_components_ts0.py</code>
+    </td>
+    <td align="center" valign="middle">0</td>
+    <td align="center" valign="middle">—</td>
+    <td align="center" valign="middle">iteration</td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="middle">1</td>
+    <td align="center" valign="middle">—</td>
+    <td align="center" valign="middle">TRA total loss</td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="middle" rowspan="3">
+      <code>min_max_total_losses.py</code>
+    </td>
+    <td align="center" valign="middle">0</td>
+    <td align="center" valign="middle">iteration</td>
+    <td align="center" valign="middle">—</td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="middle">1</td>
+    <td align="center" valign="middle">
+      minimum total loss across all training sets
+    </td>
+    <td align="center" valign="middle">—</td>
+  </tr>
+
+  <tr>
+    <td align="center" valign="middle">2</td>
+    <td align="center" valign="middle">
+      maximum total loss across all training sets
+    </td>
+    <td align="center" valign="middle">—</td>
   </tr>
 
 </tbody>
 </table>
+</div>
 </div>
 
 ## Hardware and Software setup
