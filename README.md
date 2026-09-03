@@ -455,7 +455,9 @@ Note that for $t=0$, no residual is computed. The network for `model_a` is train
 
 ### After code execution
 
-In both V-PINN or DT-PINN cases, after code execution, many more statistics can be analysed by performing post-processing on the data that was saved during code execution, running the code `post_processing_V_PINN.py` or `post_processing_DT_PINN.py`, depending on the case. Some of these statistics were directly used in the report and are referred in the "**Correspondence between results from the report and the data files**" section of this README.
+In both V-PINN or DT-PINN cases, after code execution, many more statistics can be analysed by performing post-processing on the data that was saved during code execution, running the code `post_processing_V_PINN.py` or `post_processing_DT_PINN.py`, depending on the case. Some of these statistics were directly used in the report and are referred in the "**Correspondence between results from the PDF report and the data files**" section of this README.
+
+[Correspondence between results from the PDF report and the data files](#correspondence-between-results-from-the-pdf-report-and-the-data-files)
 
 
 ## Directory Structure
