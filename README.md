@@ -455,9 +455,7 @@ Note that for $t=0$, no residual is computed. The network for `model_a` is train
 
 ### After code execution
 
-In both V-PINN or DT-PINN cases, after code execution, many more statistics can be analysed by performing post-processing on the data that was saved during code execution, running the code `post_processing_V_PINN.py` or `post_processing_DT_PINN.py`, depending on the case. Some of these statistics were directly used in the report and are referred in the "**Correspondence between results from the PDF report and the data files**" section of this README.
-
-[Correspondence between results from the PDF report and the data files](#correspondence-between-results-from-the-pdf-report-and-the-data-files)
+In both V-PINN or DT-PINN cases, after code execution, many more statistics can be analysed by performing post-processing on the data that was saved during code execution, running the code `post_processing_V_PINN.py` or `post_processing_DT_PINN.py`, depending on the case. Some of these statistics were directly used in the report and are referred in the [Correspondence between results from the PDF report and the data files](#correspondence-between-results-from-the-pdf-report-and-the-data-files) section of this README.
 
 
 ## Directory Structure
@@ -766,7 +764,7 @@ Inside the current `RUN_1000_*_*/` folder, the user can also perform further pro
     python3 ./post_processing_V_PINN.py
     python3 ./post_processing_DT_PINN.py
 
-These scripts use the loss files and `final_data.csv` file to produce new outputs, and are stored in the folder `CSV_post_processing/`. The `post_processing_DT_PINN.py` code will also produce `loss_X.dat` files, together with the existing loss files. For DT-PINN, each `loss_X.dat` is a vertical concatenation of the training loss values for each time step of the `X` run inside the `loss_runX_tsY.dat` files, and should not to be confused with the `loss_X.dat` from the V-PINN folders. As mentioned in the "**Correspondence between results from the report and the data files**" section, three of the new output files (produced by runnning `post_processing_V_PINN.py` or `post_processing_DT_PINN.py`), for each implementation, are directly used to report results in the .pdf document in annex.
+These scripts use the loss files and `final_data.csv` file to produce new outputs, and are stored in the folder `CSV_post_processing/`. The `post_processing_DT_PINN.py` code will also produce `loss_X.dat` files, together with the existing loss files. For DT-PINN, each `loss_X.dat` is a vertical concatenation of the training loss values for each time step of the `X` run inside the `loss_runX_tsY.dat` files, and should not to be confused with the `loss_X.dat` from the V-PINN folders. As mentioned in the [Correspondence between results from the PDF report and the data files](#correspondence-between-results-from-the-pdf-report-and-the-data-files) section, three of the new output files (produced by runnning `post_processing_V_PINN.py` or `post_processing_DT_PINN.py`), for each implementation, are directly used to report results in the .pdf document in annex.
 
 ## References
 
