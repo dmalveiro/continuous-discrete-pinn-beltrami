@@ -16,7 +16,7 @@ This project uses the [DeepXDE](https://github.com/lululxvi/deepxde) framework [
 
 The implementation is based on the [Beltrami Flow example](https://github.com/lululxvi/deepxde/blob/master/examples/pinn_forward/Beltrami_flow.py) provided in the DeepXDE documentation, with substantial modifications to accomodate the project requirements. These can be seen in every `beltrami_*_0` through `beltrami_*_3` folder.
 
-In summary: this project starts from an existing implementation from DeepXDE, which was then transformed to support methodologies that are were not supported by the standard implementation. Table 1 (below) presents a side-by-side comparison between the DeepXDE original work and the implementation here presented.
+In summary: this project starts from an existing implementation from DeepXDE, which was then transformed to support methodologies that are not supported by the standard implementation. Table 1 (below) presents a side-by-side comparison between the DeepXDE original work and the implementation here presented.
 
 <p align="center">
   <strong>Table 1.</strong> Comprarison between the DeepXDE reference and this project's implementation.
